@@ -3,30 +3,37 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QLabel, QPushButton, QVB
                              QGraphicsColorizeEffect, QButtonGroup)
 from PyQt5.QtGui import QPixmap, QScreen, QMouseEvent, QGuiApplication, QImage, QFontMetrics, QFont, QIcon, QColor
 from PyQt5.QtCore import (Qt, QRect, QSize, QTimer, QEventLoop, QPropertyAnimation, QEasingCurve, QAbstractAnimation,
-                          QThreadPool)
+                          QThreadPool, QThread, QMetaObject, pyqtSignal)
 from functools import partial
-import sys
-from styles import *
-from conversation_engine import ConversationEngine
+# from version_4.ui.styles import *
+# from version_4.engine.conversation_engine import ConversationEngine
+from ui.styles import *
+from engine.conversation_engine import ConversationEngine
 
 class MainWindow(QWidget):
+    user_message_signal = pyqtSignal(str)
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Lamb conversationalist')
         self.setGeometry(100, 100, 1500, 800)
         self.setStyleSheet("background-color: #e2d9d2")
         self.default_pixmap = QPixmap('images/default_on_screen.png')
+        self.clicked_button_id = None
+
+        self.conversation_engine = ConversationEngine()
+        self.worker_thread = QThread()
+        self.conversation_engine.moveToThread(self.worker_thread)
+        self.worker_thread.start()
 
         self.make_ui()
-        self.clicked_button_id = None
-        self.c_engine = ConversationEngine()
 
 
     def make_ui(self):
         # Main Layout
         self.main_layout = QVBoxLayout(self)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
-
+        self.main_layout.setSpacing(0)
         # menu area
         self.menu_layout = QHBoxLayout()
         self.menu_layout.setContentsMargins(10, 0, 10, 0)
@@ -77,13 +84,13 @@ class MainWindow(QWidget):
         # Scrollable chat area
         self.scroll_area = QScrollArea()
         self.scroll_area.setWidgetResizable(True)
-        self.scroll_area.setStyleSheet("border-radius: 10px;")
+        # self.scroll_area.setStyleSheet("border-radius: 10px;")
         self.scroll_content = QWidget()
         self.scroll_content.setStyleSheet("background-color: #e2d9d2; border:none")
         self.scroll_layout = QVBoxLayout(self.scroll_content)
         self.scroll_layout.setAlignment(Qt.AlignTop)
         self.scroll_area.setWidget(self.scroll_content)
-        # self.scroll_area.setStyleSheet(scrollbar_style)
+        self.scroll_area.setStyleSheet(scrollbar_style)
 
         # Input field and send button
         self.input_layout = QHBoxLayout()
@@ -148,20 +155,32 @@ class MainWindow(QWidget):
         self.send_button_en.clicked.connect(partial(self.animate_button, self.send_button_en, self.send_button_es))
         self.send_button_es.clicked.connect(partial(self.animate_button, self.send_button_es, self.send_button_en))
 
+        self.user_message_signal.connect(
+            self.conversation_engine.get_conversation_reply,
+            Qt.QueuedConnection
+        )
+        self.conversation_engine.response_ready.connect(self.display_reply_from_system)
+
 
     def send_message(self):
         text = self.input_field.text().strip()
         if text:
             self.add_message(text, "user")
             self.input_field.clear()
-            self.get_reply_from_system(text)
+
+            # self.display_reply_from_system(text)
+
+            self.user_message_signal.emit(text)
 
 
-    def get_reply_from_system(self, text):
-        system_reply = self.c_engine.get_conversation_reply(text)
+    def display_reply_from_system(self, system_reply):
         reply_status = system_reply['status']
         reply_text = system_reply['text']
+        # reply_text = """
+        # text 1 \n text 2 \n text 3 \n text 4 \n text 5
+        # """
         self.add_message(reply_text, "system")
+
 
     def add_message(self, text, sender):
         message_label = QLabel(text)
@@ -192,7 +211,6 @@ class MainWindow(QWidget):
         message_container = QWidget()
         message_container.setLayout(message_layout)
         self.scroll_layout.addWidget(message_container)
-        self.scroll_area.verticalScrollBar().setValue(self.scroll_area.verticalScrollBar().maximum())
         QTimer.singleShot(0, self.update_message_widths)
 
 
@@ -217,6 +235,9 @@ class MainWindow(QWidget):
                     else:
                         label.setWordWrap(False)
                         label.setMaximumWidth(text_width)
+
+        QTimer.singleShot(0, lambda: self.scroll_area.verticalScrollBar().setValue(self.scroll_area.verticalScrollBar().maximum()))
+
 
     def animate_button(self, clicked_button, other_button):
         self.send_message()
@@ -251,6 +272,7 @@ class MainWindow(QWidget):
             clicked_button.opacity_animation.stop()
             self.clicked_button_id = None
 
+
     def handle_clear(self):
         print('clear button pressed')
         for i in range(self.scroll_layout.count()):
@@ -263,12 +285,20 @@ class MainWindow(QWidget):
         # clearing all
         """clear chatgpt memory and start anew"""
 
+
     def handle_vocal_select(self):
         self.send_button_en.show()
         self.send_button_es.show()
         self.send_text_button.hide()
 
+
     def handle_text_select(self):
         self.send_button_en.hide()
         self.send_button_es.hide()
         self.send_text_button.show()
+
+
+    def closeEvent(self, event):
+        self.worker_thread.quit()
+        self.worker_thread.wait()
+        event.accept()

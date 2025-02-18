@@ -1,4 +1,4 @@
-from gui_support import *
+from ui.gui_support import *
 import sys
 
 if __name__ == '__main__':

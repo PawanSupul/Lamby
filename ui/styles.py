@@ -49,11 +49,11 @@ select_text_style = """
 """
 
 menu_style = """
-    background-color: #8cb7a4; border-radius: 0px; border: None
+    background-color: #8cb7a4; border-radius: 0px; border:none;
 """
 
 input_field_style = """
-    border-radius: 25px; background-color: white; height: 3em; padding: 3px
+    border-radius: 25px; background-color: white; height: 3em; padding: 3px;
 """
 
 button_en_style = """
@@ -97,12 +97,11 @@ system_message_style = """
 """
 
 scrollbar_style = """
-    QScrollBar {
-        border: none;
-        border-radius: 10px;
-        background-color: #e2d9d2; 
+    QScrollArea {
+        border: 2px solid transparent;  /* Adds border to ScrollArea */
+        border-radius: 5px;
     }
-
+    
     QScrollBar:vertical {
         border: none;
         background: #d7cfc7;  /* Light beige background  #d7cfc7 */ 
@@ -112,28 +111,31 @@ scrollbar_style = """
     }
 
     QScrollBar::handle:vertical {
-        background: qlineargradient(
-            x1:0, y1:0, x2:1, y2:1,
-            /*stop:0 #A67C52, stop:1 #8B5E3C*/
-            stop:0 #83b6a0, stop:1 #74a28e
-        );
+         background: qlineargradient(                 
+             x1:0, y1:0, x2:1, y2:1,                  
+             /*stop:0 #A67C52, stop:1 #8B5E3C*/       
+             stop:0 #83b6a0, stop:1 #74a28e           
+         );                                           
+        border: none;
         min-height: 20px;
         border-radius: 6px;  /* Rounded handle */
     }
 
     QScrollBar::handle:vertical:hover {
-        background: qlineargradient(
-            x1:0, y1:0, x2:1, y2:1,
-            stop:0 #8bc1a9, stop:1 #7eb09a
-        );  /* Lighter brown when hovered */
+         background: qlineargradient(             
+             x1:0, y1:0, x2:1, y2:1,              
+             stop:0 #8bc1a9, stop:1 #7eb09a      
+         );  /* Lighter brown when hovered */     
     }
-
+    
     QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+        border: none;
         background: none;
         height: 0px;
     }
 
     QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+        border: none;
         background: none;
     }
 """

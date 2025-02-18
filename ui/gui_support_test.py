@@ -45,8 +45,14 @@ class ToggleButtonGroup(QWidget):
         selected_button = self.button_group.button(button_id)
         self.label.setText(f"Selected: {selected_button.text()}")
 
-# Run the application
-app = QApplication([])
-window = ToggleButtonGroup()
-window.show()
-app.exec_()
+# # Run the application
+# app = QApplication([])
+# window = ToggleButtonGroup()
+# window.show()
+# app.exec_()
+
+if __name__ == '__main__':
+    sigma = 5
+    delta = 5
+    n = ((1.645 + 1.28) * sigma / (delta - 1)) ** 2
+    print(n)
