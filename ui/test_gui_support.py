@@ -1,3 +1,5 @@
+import asyncio
+
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QButtonGroup, QLabel
 
 class ToggleButtonGroup(QWidget):
@@ -51,8 +53,14 @@ class ToggleButtonGroup(QWidget):
 # window.show()
 # app.exec_()
 
+from googletrans import Translator
+
+async def translate_text():
+    translator = Translator()
+    translated = await translator.translate('me gusta manzanas')
+    return translated.text
+
 if __name__ == '__main__':
-    sigma = 5
-    delta = 5
-    n = ((1.645 + 1.28) * sigma / (delta - 1)) ** 2
-    print(n)
+
+    tr = asyncio.run(translate_text())
+    print(f'translated: {tr}')

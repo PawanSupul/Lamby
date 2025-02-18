@@ -6,8 +6,8 @@ import json
 class SpeachToText():
     def __init__(self):
         # Set model path (download from https://alphacephei.com/vosk/models)
-        model_path_en = "models/vosk-model-small-en-in-0.4"
-        model_path_es = "models/vosk-model-small-es-0.42"
+        model_path_en = "data/models/vosk-model-small-en-in-0.4"
+        model_path_es = "data/models/vosk-model-small-es-0.42"
         self.model_en = vosk.Model(model_path_en)
         self.model_es = vosk.Model(model_path_es)
         self.rec_en = vosk.KaldiRecognizer(self.model_en, 16000)
@@ -55,6 +55,8 @@ class SpeachToText():
                 if full_phrase:
                     result = json.loads(rec.Result())["text"]
                     print(f"You said EN: {result}")
+                    return result
+
 
 
 if __name__ == '__main__':

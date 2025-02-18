@@ -22,6 +22,15 @@ clear_style = """
         }
 """
 
+
+select_back_style = """
+"""
+
+
+select_user_style = """
+"""
+
+
 select_vocal_style = """
     QPushButton {
             background-color: #baa488;
@@ -73,6 +82,30 @@ send_text_button_style = """
     QPushButton:pressed {
             background-color: #6e8d7f; /* Change background when pressed */
             /*border: 1px solid black;*/
+        }
+"""
+
+translated_message_style = """
+    QLabel {
+        background-color: #c0dbff; 
+        color: red;
+        padding: 8px; 
+        letter-spacing: 0.1em;
+        border-radius: 10px;
+    }
+"""
+
+style_translate_button = """
+    QPushButton {
+            background-color: #e2d9d2;
+            border-radius: 10px;
+            border: None;
+        }
+    QPushButton:hover{
+        background-color: #ccbbad;
+    }
+    QPushButton:pressed {
+            background-color: #b1957f; /* Change background when pressed */
         }
 """
 
