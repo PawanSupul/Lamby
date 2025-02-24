@@ -25,7 +25,7 @@ input_style = '''
 
 login_button_style = '''
     QPushButton {
-        background-color: #5E81AC;
+        background-color: #6889b1;
         border: none;
         border-radius: 10px;
         padding: 8px;
@@ -35,11 +35,11 @@ login_button_style = '''
     }
     
     QPushButton:hover {
-        background-color: #81A1C1;
+        background-color: #577ba8;
     }
 
     QPushButton:pressed {
-        background-color: #88C0D0;
+        background-color: #4e6f97;
     }
 '''
 

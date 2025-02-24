@@ -23,11 +23,8 @@ class MainWindow(QStackedWidget):
         self.clicked_button_id = None
 
         self.login_screen = LoginScreen(self.go_to_named_screen)
-
         self.signup_screen = SignUpScreen(self.go_to_named_screen)
-
         self.load_screen = LoadScreen(self.go_to_named_screen)
-
         self.app_screen = AppScreen(self.go_to_named_screen)
         self.app_screen.make_app_screen()
 
@@ -56,10 +53,6 @@ class MainWindow(QStackedWidget):
             self.setCurrentWidget(self.app_screen)
         else:
             self.setCurrentWidget(self.login_screen)
-
-    # def go_to_app(self, username):
-    #     self.app_screen.update_username(username)
-    #     self.setCurrentWidget(self.app_screen)
 
 
 

@@ -1,5 +1,4 @@
 import json
-import bcrypt
 import datetime
 
 credential_file = 'user/credential.json'
@@ -139,12 +138,5 @@ def get_gender_for_user(username):
 
 
 if __name__ == '__main__':
-    # save_credentials('test 3', 'test pw', True)
-    # today_date = datetime.datetime.today()
-    # updated = "2025-02-08"
-    # last_update = datetime.datetime.strptime(updated, "%Y-%m-%d")
-    # b = 9
-    # results = verify_user('test', 'test pw 1')
-    # print(results)
     credential_file = 'credential.json'
     save_credentials_when_signup('test', 'test', True)

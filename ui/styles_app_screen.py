@@ -1,30 +1,47 @@
+color_reset_normal = '#8cb7a4'
+color_reset_hover = '#999999'
+color_reset_press = '#808080'
+
+color_send_normal = '#8cb7a4'
+color_send_hover = '#72a78f'
+color_send_press = '#588d75'
+
+color_voice_normal = '#b3b3b3'
+color_voice_hover = '#999999'
+color_voice_press = '#808080'
+
 reset_style = """
     QPushButton {
-            background-color: #baa488;
+            background-color: %s;
             border-radius: 20px;
             border: None;
         }
+    QPushButton:hover {
+            background-color: %s;
+        }
     QPushButton:pressed {
-            background-color: #aa957a; /* Change background when pressed */
+            background-color: %s; 
             border: 1px solid black;
         }
-    """
+    """%(color_reset_normal, color_reset_hover, color_reset_press)
 
 clear_style = """
     QPushButton {
-            background-color: #baa488;
+            background-color: %s;
             border-radius: 20px;
             border: None;
         }
+    QPushButton:hover {
+            background-color: %s;
+        }
     QPushButton:pressed {
-            background-color: #aa957a; /* Change background when pressed */
+            background-color: %s; /* Change background when pressed */
             border: 1px solid black;
         }
-"""
+"""%(color_reset_normal, color_reset_hover, color_reset_press)
 
 
-select_back_style = """
-"""
+select_back_style = clear_style
 
 
 select_user_style = """
@@ -33,29 +50,35 @@ select_user_style = """
 
 select_vocal_style = """
     QPushButton {
-            background-color: #baa488;
-            border-top-left-radius: 20px;
-            border-bottom-left-radius: 20px;
+            background-color: %s;
+            /* border-top-left-radius: 20px; */
+            /* border-bottom-left-radius: 20px; */
+            border-radius: 20px;
             border: None;
         }
+    QPushButton:hover {
+            background-color: %s;
+        }
     QPushButton:checked {
-            background-color: #aa957a; /* Change background when pressed */
+            background-color: %s; /* Change background when pressed */
             border: 1px solid black;
         }
-"""
+"""%(color_reset_normal, color_reset_hover, color_reset_press)
 
 select_text_style = """
     QPushButton {
-            background-color: #baa488;
-            border-top-right-radius: 20px;
-            border-bottom-right-radius: 20px;
+            background-color: %s;
+            border-radius: 20px;
             border: None;
         }
+    QPushButton:hover {
+            background-color: %s;
+        }
     QPushButton:checked {
-            background-color: #aa957a; /* Change background when pressed */
+            background-color: %s; /* Change background when pressed */
             border: 1px solid black;
         }
-"""
+"""%(color_reset_normal, color_reset_hover, color_reset_press)
 
 menu_style = """
     background-color: #8cb7a4; border-radius: 0px; border:none;
@@ -65,19 +88,51 @@ input_field_style = """
     border-radius: 25px; background-color: white; height: 3em; padding: 3px;
 """
 
+# button_en_style = """
+#     border-radius: 30px; border: none; background-color: #8cb7a4
+# """
 button_en_style = """
-    border-radius: 30px; border: none; background-color: #8cb7a4
-"""
+    QPushButton {
+            background-color: %s;
+            border-radius: 30px;
+            border: None;
+        }
+    QPushButton:hover {
+            background-color: %s;
+        }
+    QPushButton:checked {
+            background-color: %s; /* Change background when pressed */
+            border: 2px solid black;
+        }
+"""%(color_voice_normal, color_voice_hover, color_voice_press)
 
+
+# button_es_style = """
+#     border-radius: 30px; border: none; background-color: #baa488
+# """
 button_es_style = """
-    border-radius: 30px; border: none; background-color: #baa488
-"""
+    QPushButton {
+            background-color: %s;
+            border-radius: 30px;
+            border: None;
+        }
+    QPushButton:hover {
+            background-color: %s;
+        }
+    QPushButton:checked {
+            background-color: %s; /* Change background when pressed */
+            border: 2px solid black;
+        }
+"""%(color_voice_normal, color_voice_hover, color_voice_press)
 
 send_text_button_style = """
     QPushButton {
             background-color: #8cb7a4;
             border-radius: 20px;
             border: None;
+        }
+    QPushButton:hover {
+            background-color: %s;
         }
     QPushButton:pressed {
             background-color: #6e8d7f; /* Change background when pressed */

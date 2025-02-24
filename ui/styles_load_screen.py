@@ -1,10 +1,15 @@
 color_complete_normal = '#8cb7a4'
-color_complete_press = '#6e8d7f'
-color_ongoing_normal = '#728ea3'
-color_ongoing_press = '#566b7a'
-color_pending_normal = '#c4bd4e'
-color_pending_press = '#9f9940'
-
+color_complete_hover = '#72a78f'
+color_complete_press = '#588d75'
+color_ongoing_normal = '#85aac6' # '#85aac6'
+color_ongoing_hover = '#6392b6'
+color_ongoing_press = '#49789c'
+color_pending_normal = '#b3b3b3' # '#c4bd4e'
+color_pending_hover = '#999999'
+color_pending_press = '#808080' # '#9f9940'
+color_quick_button_normal = '#85aac6' # '#8cb7a4'
+color_quick_button_hover = '#6392b6' # '#9bcfb8'
+color_quick_button_press = '#49789c' # '#6e8d7f'
 
 storyline_container_style = """
     border: 2px solid gray;
@@ -14,7 +19,7 @@ storyline_container_style = """
 
 quick_chat_button_style = """
     QPushButton {
-            background-color: #8cb7a4;
+            background-color: %s;
             border-radius: 10px;
             border: none;
             padding: 25px;
@@ -22,11 +27,14 @@ quick_chat_button_style = """
             font-family: calibri;
             font-weight: bold;
         }
+    QPushButton:hover {
+            background-color: %s;
+        }
     QPushButton:pressed {
-            background-color: #6e8d7f; /* Change background when pressed */
+            background-color: %s;
             border: 1px solid black;
         }
-"""
+"""%(color_quick_button_normal, color_quick_button_hover, color_quick_button_press)
 
 lesson_button_style = '''
     QPushButton {
@@ -36,11 +44,14 @@ lesson_button_style = '''
             text-align: left;
             padding: 20px
         }
+    QPushButton:hover {
+            background-color: %s;
+        }
     QPushButton:pressed {
             background-color: %s; /* Change background when pressed */
             border: 1px solid black;
         }
-'''%(color_pending_normal, color_pending_press)
+'''%(color_pending_normal, color_pending_hover, color_pending_press)
 
 hide_lesson_button_style = """
     border: none;
@@ -55,11 +66,14 @@ section_button_style = '''
             font-size: 20px;
             font-weight: bold;
         }
+    QPushButton:hover {
+            background-color: %s;
+        }
     QPushButton:pressed {
             background-color: %s /* #6e8d7f;  Change background when pressed */
             /*border: 3px solid black;*/
         }
-'''%(color_pending_normal, color_pending_press)
+'''%(color_pending_normal, color_pending_hover, color_pending_press)
 
 scrollbar_style = """
     QScrollArea {
@@ -132,11 +146,14 @@ def update_lesson_buttons_styles(button, mode):
                     text-align: left;
                     padding: 20px
                 }
+            QPushButton:hover {
+                background-color: %s;
+            }
             QPushButton:pressed {
                     background-color: %s;       /* Change background when pressed */
                     border: 2px solid black;
                 }
-        """%(color_complete_normal, color_complete_press)
+        """%(color_complete_normal, color_complete_hover, color_complete_press)
     elif mode == 1:
         temp_style = """
             QPushButton {
@@ -146,11 +163,14 @@ def update_lesson_buttons_styles(button, mode):
                     text-align: left;
                     padding: 20px
                 }
+            QPushButton:hover {
+                background-color: %s;
+            }
             QPushButton:pressed {
                     background-color: %s; /* Change background when pressed */
                     border: 2px solid black;
                 }
-        """%(color_pending_normal, color_pending_press)
+        """%(color_pending_normal, color_pending_hover, color_pending_press)
     else:
         temp_style = ''
         print('mode not defined')
@@ -174,23 +194,29 @@ def update_section_buttons_styles(button, mode):
                     font-size: 20px;
                     font-weight: bold;
                 }
+            QPushButton:hover {
+                background-color: %s;
+            }
             QPushButton:pressed {
                     background-color: %s ;
         }
-        """%(color_complete_normal, color_complete_press)
+        """%(color_complete_normal, color_complete_hover, color_complete_press)
     elif (mode == '01'):
         temp_style = """
-                    QPushButton {
-                            background-color: %s; 
-                            border-radius: 50px;
-                            border: none;
-                            font-size: 20px;
-                            font-weight: bold;
-                        }
-                    QPushButton:pressed {
-                            background-color: %s; 
+                QPushButton {
+                        background-color: %s; 
+                        border-radius: 50px;
+                        border: none;
+                        font-size: 20px;
+                        font-weight: bold;
+                    }
+                QPushButton:hover {
+                    background-color: %s;
                 }
-                """%(color_ongoing_normal, color_ongoing_press)
+                QPushButton:pressed {
+                        background-color: %s; 
+                }
+                """%(color_ongoing_normal, color_ongoing_hover, color_ongoing_press)
     elif (mode == '02'):
         temp_style = """
                     QPushButton {
@@ -200,10 +226,13 @@ def update_section_buttons_styles(button, mode):
                             font-size: 20px;
                             font-weight: bold;
                         }
+                    QPushButton:hover {
+                        background-color: %s;
+                    }
                     QPushButton:pressed {
                             background-color: %s; 
                 }
-                """%(color_pending_normal, color_pending_press)
+                """%(color_pending_normal, color_pending_hover, color_pending_press)
     elif (mode == '10'):
         temp_style = """
                     QPushButton {
@@ -213,11 +242,14 @@ def update_section_buttons_styles(button, mode):
                             font-size: 20px;
                             font-weight: bold;
                         }
+                    QPushButton:hover {
+                        background-color: %s;
+                    }
                     QPushButton:pressed {
                             background-color: %s; 
                             border: 3px solid black;
                 }
-                """%(color_complete_normal, color_complete_press)
+                """%(color_complete_normal, color_complete_hover, color_complete_press)
     elif (mode == '11'):
         temp_style = """
                     QPushButton {
@@ -227,11 +259,14 @@ def update_section_buttons_styles(button, mode):
                             font-size: 20px;
                             font-weight: bold;
                         }
+                    QPushButton:hover {
+                        background-color: %s;
+                    }
                     QPushButton:pressed {
                             background-color: %s ;
                             border: 3px solid black;
                 }
-                """%(color_ongoing_normal, color_ongoing_press)
+                """%(color_ongoing_normal, color_ongoing_hover, color_ongoing_press)
     elif (mode == '12'):
         temp_style = """
                     QPushButton {
@@ -241,11 +276,14 @@ def update_section_buttons_styles(button, mode):
                             font-size: 20px;
                             font-weight: bold;
                         }
+                    QPushButton:hover {
+                        background-color: %s;
+                    }
                     QPushButton:pressed {
                             background-color: %s ;
                             border: 3px solid black;
                 }
-                """%(color_pending_normal, color_pending_press)
+                """%(color_pending_normal, color_pending_hover, color_pending_press)
     else:
         temp_style = ''
         print('mode not defined')

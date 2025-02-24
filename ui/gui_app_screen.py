@@ -35,7 +35,7 @@ class AppScreen(QWidget):
         self.username = ''
         self.previous_translation_src = ''
         self.previous_translation_dest = ''
-        self.dialog_threshold_for_lesson_complete = 5
+        self.dialog_threshold_for_lesson_complete = 1
         self.clicked_button_id = None
 
     def set_information(self, username, **kwargs):
@@ -61,17 +61,17 @@ class AppScreen(QWidget):
         self.main_layout.setSpacing(0)
         # menu area
         self.menu_layout = QHBoxLayout()
-        self.menu_layout.setContentsMargins(10, 0, 10, 0)
+        self.menu_layout.setContentsMargins(15, 0, 15, 0)
 
         self.reset_button = QPushButton()
         self.reset_button.setIcon(QIcon('images/refresh.png'))
-        self.reset_button.setFixedSize(50, 40)
+        self.reset_button.setFixedSize(70, 40)
         self.reset_button.setIconSize(self.reset_button.size() - QSize(10, 10))
         self.reset_button.setStyleSheet(reset_style)
 
         self.clear_button = QPushButton()
         self.clear_button.setIcon(QIcon('images/dustbin.png'))
-        self.clear_button.setFixedSize(50, 40)
+        self.clear_button.setFixedSize(70, 40)
         self.clear_button.setIconSize(self.clear_button.size() - QSize(10, 10))
         self.clear_button.setStyleSheet(clear_style)
 
@@ -79,14 +79,14 @@ class AppScreen(QWidget):
         self.select_button_group = QButtonGroup()
         self.select_button_group.setExclusive(True)
         self.select_vocal = QPushButton()
-        self.select_vocal.setFixedSize(80, 40)
+        self.select_vocal.setFixedSize(70, 40)
         self.select_vocal.setIcon(QIcon('images/mic_4.png'))
         self.select_vocal.setIconSize(self.select_vocal.size() - QSize(10, 10))
         self.select_vocal.setStyleSheet(select_vocal_style)
         self.select_vocal.setCheckable(True)
         # self.select_vocal.setChecked(True)
         self.select_text = QPushButton()
-        self.select_text.setFixedSize(80, 40)
+        self.select_text.setFixedSize(70, 40)
         self.select_text.setIcon(QIcon('images/text.png'))
         self.select_text.setIconSize(self.select_text.size() - QSize(10, 10))
         self.select_text.setStyleSheet(select_text_style)
@@ -99,7 +99,7 @@ class AppScreen(QWidget):
         self.select_button_layout.setSpacing(5)
 
         self.select_back = QPushButton()
-        self.select_back.setFixedSize(40, 40)
+        self.select_back.setFixedSize(70, 40)
         self.select_back.setIcon(QIcon('images/back.png'))
         self.select_back.setIconSize(self.select_back.size() - QSize(10, 10))
         self.select_back.setStyleSheet(select_back_style)
@@ -119,7 +119,8 @@ class AppScreen(QWidget):
         self.menu_layout.addWidget(self.select_back)
         self.menu_layout.addLayout(self.select_button_layout)
         self.menu_layout.addWidget(self.select_user)
-        self.menu_layout.setSpacing(25)
+        # self.menu_layout.setSpacing(25)
+        self.menu_layout.setSpacing(20)
         self.menu_container = QWidget()
         self.menu_container.setStyleSheet(menu_style)  #
         self.menu_container.setFixedHeight(50)
@@ -152,6 +153,7 @@ class AppScreen(QWidget):
         self.send_button_en.setFixedSize(60, 60)
         # self.send_button_en.setIconSize(self.send_button_en.size())
         self.send_button_en.setStyleSheet(button_en_style)
+        self.send_button_en.setCheckable(True)
         self.send_button_en.setShortcut("e")
 
         self.send_button_es = QPushButton("ES")
@@ -159,11 +161,12 @@ class AppScreen(QWidget):
         self.send_button_es.setFixedSize(60, 60)
         # self.send_button_es.setIconSize(self.send_button_es.size())
         self.send_button_es.setStyleSheet(button_es_style)
+        self.send_button_es.setCheckable(True)
         self.send_button_es.setShortcut("s")
 
         self.send_text_button = QPushButton()
         self.send_text_button.setIcon(QIcon('images/send.png'))
-        self.send_text_button.setFixedSize(100, 60)
+        self.send_text_button.setFixedSize(90, 55)
         self.send_text_button.setIconSize(self.send_text_button.size() - QSize(20, 20))
         self.send_text_button.setStyleSheet(send_text_button_style)
         self.send_text_button.setShortcut("Return")
@@ -326,49 +329,26 @@ class AppScreen(QWidget):
 
 
     def animate_button(self, clicked_button, other_button):
-        # self.send_message()
-        """Animate button expansion and shrinkage when clicked"""
-        if self.clicked_button_id == None:
-            shutit = False
-        elif(clicked_button != self.clicked_button_id):
-            shutit = False
+        if self.clicked_button_id == clicked_button:
+            print('same clicked')
+            clicked_button.setText('TN')
         else:
-            shutit = True
-        self.clicked_button_id = clicked_button
+            self.clicked_button_id = clicked_button
+            if clicked_button == self.send_button_es:
+                print('pressed button is ES')
+                self.speech_to_text.set_model("es")
+                speech = self.speech_to_text.speech_to_text_dynamic()
+                self.input_field.setText(speech)
+            else:
+                print('pressed button is EN')
+                self.speech_to_text.set_model("en")
+                speech = self.speech_to_text.speech_to_text_dynamic()
+                self.input_field.setText(speech)
+            self.send_message()
+            print('unclick')
+            clicked_button.setText('DN')
 
-        low_opacity = 0.5
-        high_opacity = 1.0
 
-        self.opacity_anim = QPropertyAnimation(clicked_button.graphicsEffect(), b"opacity")
-        self.opacity_anim.setDuration(1000)
-        self.opacity_anim.setStartValue(high_opacity)
-        self.opacity_anim.setKeyValueAt(0.5, low_opacity)
-        self.opacity_anim.setEndValue(high_opacity)
-        self.opacity_anim.setEasingCurve(QEasingCurve.InOutQuad)
-        self.opacity_anim.setLoopCount(-1)  # Infinite loop
-
-        self.opacity_anim.start()
-
-        if hasattr(other_button, "opacity_animation"):
-            other_button.opacity_animation.stop()
-            other_button.graphicsEffect().setOpacity(1.0)
-        clicked_button.opacity_animation = self.opacity_anim
-
-        if shutit == True:
-            clicked_button.opacity_animation.stop()
-            self.clicked_button_id = None
-
-        if clicked_button == self.send_button_es:
-            print('pressed button is ES')
-            self.speech_to_text.set_model("es")
-            speech = self.speech_to_text.speech_to_text_dynamic()
-            self.input_field.setText(speech)
-        else:
-            print('pressed button is EN')
-            self.speech_to_text.set_model("en")
-            speech = self.speech_to_text.speech_to_text_dynamic()
-            self.input_field.setText(speech)
-        self.send_message()
 
     def handle_clear(self):
         print('clear button pressed')

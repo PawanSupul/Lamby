@@ -12,6 +12,7 @@ class ConversationEngine(QObject):
         self.lesson = 'general day to day conversation'
         self.conversation_history = []
         self.num_dialogs = 0
+        self.set_key()
 
 
     def set_key(self):
