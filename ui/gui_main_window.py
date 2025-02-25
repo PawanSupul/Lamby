@@ -1,11 +1,5 @@
-from PyQt5.QtWidgets import (QApplication, QStackedWidget, QMainWindow, QLabel, QPushButton, QVBoxLayout, QHBoxLayout,
-                             QWidget, QSizePolicy, QScrollArea, QLineEdit, QGraphicsOpacityEffect,
-                             QButtonGroup, QCheckBox, QFrame)
-from PyQt5.QtGui import QPixmap, QScreen, QMouseEvent, QGuiApplication, QImage, QFontMetrics, QFont, QIcon, QColor
-from PyQt5.QtCore import (Qt, QRect, QSize, QTimer, QPropertyAnimation, QEasingCurve, QAbstractAnimation,
-                          QThread, pyqtSignal)
-
-from functools import partial
+from PyQt5.QtWidgets import QStackedWidget
+from PyQt5.QtGui import QPixmap
 
 from ui.gui_login_screen import LoginScreen
 from ui.gui_signup_screen import SignUpScreen

@@ -47,9 +47,9 @@ class LoadScreen(QWidget):
         self.select_back.clicked.connect(self.handle_go_back)
 
         self.select_user = QPushButton()
-        self.select_user.setFixedSize(40, 40)
+        self.select_user.setFixedSize(42, 42)
         self.select_user.setIcon(QIcon('images/user_male.png'))
-        self.select_user.setIconSize(self.select_user.size())
+        self.select_user.setIconSize(self.select_user.size() - QSize(2, 2))
         self.select_user.setStyleSheet(select_user_style)
         self.user_menu = QMenu()
         self.user_menu.addAction('Logout', self.handle_logout)
@@ -98,13 +98,10 @@ class LoadScreen(QWidget):
 
         self.storyline_layout.addLayout(self.section_layout)
         self.storyline_layout.addWidget(self.scroll_area)
-        # self.storyline_layout.setContentsMargins(20,20,20,20)
-        # self.storyline_layout.setSpacing(20)
 
         self.storyline_container = QFrame()
         self.storyline_container.setStyleSheet(storyline_container_style)
         self.storyline_container.setLayout(self.storyline_layout)
-        # self.storyline_container.layout().setContentsMargins(20,20,20,20)
 
         self.main_load_layout = QVBoxLayout()
         self.main_load_layout.addLayout(self.quick_start_layout)

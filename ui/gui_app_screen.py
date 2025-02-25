@@ -84,14 +84,14 @@ class AppScreen(QWidget):
         self.select_vocal.setIconSize(self.select_vocal.size() - QSize(10, 10))
         self.select_vocal.setStyleSheet(select_vocal_style)
         self.select_vocal.setCheckable(True)
-        # self.select_vocal.setChecked(True)
+        self.select_vocal.setChecked(True)
         self.select_text = QPushButton()
         self.select_text.setFixedSize(70, 40)
         self.select_text.setIcon(QIcon('images/text.png'))
         self.select_text.setIconSize(self.select_text.size() - QSize(10, 10))
         self.select_text.setStyleSheet(select_text_style)
         self.select_text.setCheckable(True)
-        self.select_text.setChecked(True)
+        # self.select_text.setChecked(True)
         self.select_button_group.addButton(self.select_vocal, 1)
         self.select_button_group.addButton(self.select_text, 1)
         self.select_button_layout.addWidget(self.select_vocal)
@@ -105,9 +105,9 @@ class AppScreen(QWidget):
         self.select_back.setStyleSheet(select_back_style)
 
         self.select_user = QPushButton()
-        self.select_user.setFixedSize(40, 40)
+        self.select_user.setFixedSize(42, 42)
         self.select_user.setIcon(QIcon('images/user_male.png'))
-        self.select_user.setIconSize(self.select_user.size())
+        self.select_user.setIconSize(self.select_user.size()-QSize(2, 2))
         self.select_user.setStyleSheet(select_user_style)
         self.user_menu = QMenu()
         self.user_menu.addAction('Logout', self.handle_logout)
@@ -148,16 +148,16 @@ class AppScreen(QWidget):
         self.input_field.setFont(QFont('Helvetica', 15))
         self.input_field.setStyleSheet(input_field_style)
 
-        self.send_button_en = QPushButton("EN")
-        # self.send_button_en.setIcon(QIcon('images/mic_3.png'))
+        self.send_button_en = QPushButton() #("EN")
+        # self.send_button_en.setIcon(QIcon('images/english_unselect.png'))
         self.send_button_en.setFixedSize(60, 60)
         # self.send_button_en.setIconSize(self.send_button_en.size())
         self.send_button_en.setStyleSheet(button_en_style)
         self.send_button_en.setCheckable(True)
         self.send_button_en.setShortcut("e")
 
-        self.send_button_es = QPushButton("ES")
-        # self.send_button_es.setIcon(QIcon('images/mic_3.png'))
+        self.send_button_es = QPushButton() #("ES")
+        # self.send_button_es.setIcon(QIcon('images/spanish_unselect.png'))
         self.send_button_es.setFixedSize(60, 60)
         # self.send_button_es.setIconSize(self.send_button_es.size())
         self.send_button_es.setStyleSheet(button_es_style)
@@ -171,12 +171,6 @@ class AppScreen(QWidget):
         self.send_text_button.setStyleSheet(send_text_button_style)
         self.send_text_button.setShortcut("Return")
 
-        button_en_op = QGraphicsOpacityEffect(self)
-        button_en_op.setOpacity(1.0)
-        self.send_button_en.setGraphicsEffect(button_en_op)
-        button_es_op = QGraphicsOpacityEffect(self)
-        button_es_op.setOpacity(1.0)
-        self.send_button_es.setGraphicsEffect(button_es_op)
 
         self.input_button_set_layout = QHBoxLayout()
         self.input_button_set_layout.addWidget(self.send_button_en)
@@ -206,8 +200,8 @@ class AppScreen(QWidget):
         self.select_back.clicked.connect(self.handle_go_back)
         self.select_user.clicked.connect(self.show_user_menu)
         self.send_text_button.clicked.connect(self.send_message)
-        self.send_button_en.clicked.connect(partial(self.animate_button, self.send_button_en, self.send_button_es))
-        self.send_button_es.clicked.connect(partial(self.animate_button, self.send_button_es, self.send_button_en))
+        self.send_button_en.clicked.connect(partial(self.animate_button, self.send_button_en))
+        self.send_button_es.clicked.connect(partial(self.animate_button, self.send_button_es))
 
         self.user_message_signal.connect(self.conversation_engine.get_conversation_reply, Qt.QueuedConnection)
         self.reset_chat_signal.connect(self.conversation_engine.reset_conversation, Qt.QueuedConnection)
@@ -226,10 +220,19 @@ class AppScreen(QWidget):
             # self.display_reply_from_system(text)
             self.user_message_signal.emit(text)
 
-    def translate_process(self, es_text):
+    def translate_process(self, es_text, button):
+        # unclick other buttons
+        for i in range(self.scroll_layout.count()):
+            widget = self.scroll_layout.itemAt(i).widget()
+            if widget:
+                btn = widget.findChild(QPushButton)
+                if btn != button:
+                    btn.setChecked(False)
+        # above
         if self.previous_translation_src == es_text:
             if self.translated_result.isVisible():
                 self.translated_result.hide()
+                button.setChecked(False)
             else:
                 self.translated_result.show()
         else:
@@ -238,7 +241,7 @@ class AppScreen(QWidget):
             self.translated_result.setText(translated)
             self.translated_result.show()
 
-        max_width = int(self.scroll_area.viewport().width() * 0.75)
+        max_width = int(self.scroll_area.viewport().width() * 0.85)
         text_width = QFontMetrics(self.translated_result.font()).boundingRect(self.translated_result.text()).width() + 40
         if text_width > max_width:
             self.translated_result.setWordWrap(True)
@@ -282,7 +285,8 @@ class AppScreen(QWidget):
         translate_button.setFixedSize(40, 40)
         translate_button.setIconSize(translate_button.size() - QSize(20, 20))
         translate_button.setStyleSheet(style_translate_button)
-        translate_button.clicked.connect(partial(self.translate_process, text))
+        translate_button.setCheckable(True)
+        translate_button.clicked.connect(partial(self.translate_process, text, translate_button))
 
         message_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         message_layout = QHBoxLayout()
@@ -328,10 +332,10 @@ class AppScreen(QWidget):
         QTimer.singleShot(0, lambda: self.scroll_area.verticalScrollBar().setValue(self.scroll_area.verticalScrollBar().maximum()))
 
 
-    def animate_button(self, clicked_button, other_button):
+    def animate_button(self, clicked_button):
         if self.clicked_button_id == clicked_button:
             print('same clicked')
-            clicked_button.setText('TN')
+            self.clicked_button_id = None
         else:
             self.clicked_button_id = clicked_button
             if clicked_button == self.send_button_es:
@@ -345,9 +349,9 @@ class AppScreen(QWidget):
                 speech = self.speech_to_text.speech_to_text_dynamic()
                 self.input_field.setText(speech)
             self.send_message()
-            print('unclick')
-            clicked_button.setText('DN')
-
+            print('different unclick')
+        clicked_button.setChecked(False)
+        self.clicked_button_id = None
 
 
     def handle_clear(self):
@@ -395,7 +399,3 @@ class AppScreen(QWidget):
         self.worker_thread.quit()
         self.worker_thread.wait()
         event.accept()
-
-# if __name__ == '__main__':
-#     app = AppScreen()
-#     app.translate_process('te amo julia')

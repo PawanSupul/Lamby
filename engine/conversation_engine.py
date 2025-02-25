@@ -1,6 +1,5 @@
 import openai
 from PyQt5.QtCore import pyqtSignal, QObject
-# from data_io import Json_IO
 
 class ConversationEngine(QObject):
     response_ready = pyqtSignal(dict)

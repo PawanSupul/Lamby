@@ -11,11 +11,13 @@ color_quick_button_normal = '#85aac6' # '#8cb7a4'
 color_quick_button_hover = '#6392b6' # '#9bcfb8'
 color_quick_button_press = '#49789c' # '#6e8d7f'
 
+
 storyline_container_style = """
     border: 2px solid gray;
     border-radius: 10px;
     font-size: 14px;
 """
+
 
 quick_chat_button_style = """
     QPushButton {
@@ -36,6 +38,7 @@ quick_chat_button_style = """
         }
 """%(color_quick_button_normal, color_quick_button_hover, color_quick_button_press)
 
+
 lesson_button_style = '''
     QPushButton {
             background-color: %s;
@@ -53,10 +56,12 @@ lesson_button_style = '''
         }
 '''%(color_pending_normal, color_pending_hover, color_pending_press)
 
+
 hide_lesson_button_style = """
     border: none;
     background: #e2d9d2;
 """
+
 
 section_button_style = '''
     QPushButton {
@@ -74,6 +79,7 @@ section_button_style = '''
             /*border: 3px solid black;*/
         }
 '''%(color_pending_normal, color_pending_hover, color_pending_press)
+
 
 scrollbar_style = """
     QScrollArea {
@@ -121,16 +127,19 @@ scrollbar_style = """
     }
 """
 
+
 section_lesson_container_style = """
     border-radius: 10px;
     background-color: #e2d9d2;
 """
+
 
 scroll_content_style = """
     border: none;
     border-radius: 20px;
     background-color: #e2d9d2;
 """
+
 
 def update_lesson_buttons_styles(button, mode):
     '''
@@ -176,6 +185,7 @@ def update_lesson_buttons_styles(button, mode):
         print('mode not defined')
 
     button.setStyleSheet(temp_style)
+
 
 def update_section_buttons_styles(button, mode):
     '''
