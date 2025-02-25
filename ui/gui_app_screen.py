@@ -1,9 +1,7 @@
-from PyQt5.QtWidgets import (QApplication, QStackedWidget, QMainWindow, QLabel, QPushButton, QVBoxLayout, QHBoxLayout,
-                             QWidget, QSizePolicy, QScrollArea, QLineEdit, QGraphicsOpacityEffect,
-                             QButtonGroup, QCheckBox, QFrame, QMenu)
-from PyQt5.QtGui import QPixmap, QScreen, QMouseEvent, QGuiApplication, QImage, QFontMetrics, QFont, QIcon, QColor
-from PyQt5.QtCore import (Qt, QRect, QSize, QTimer, QPropertyAnimation, QEasingCurve, QAbstractAnimation,
-                          QThread, pyqtSignal, QPoint)
+from PyQt5.QtWidgets import (QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QSizePolicy,
+                             QScrollArea, QLineEdit, QButtonGroup, QMenu)
+from PyQt5.QtGui import QFontMetrics, QFont, QIcon
+from PyQt5.QtCore import (Qt, QSize, QTimer, QThread, pyqtSignal, QPoint)
 
 from functools import partial
 import asyncio
@@ -19,6 +17,7 @@ from converter.text_to_speech import TextToSpeech_Microsoft
 class AppScreen(QWidget):
     user_message_signal = pyqtSignal(str)
     reset_chat_signal = pyqtSignal()
+
 
     def __init__(self, go_to_named_screen):
         super().__init__()
@@ -37,6 +36,7 @@ class AppScreen(QWidget):
         self.previous_translation_dest = ''
         self.dialog_threshold_for_lesson_complete = 1
         self.clicked_button_id = None
+
 
     def set_information(self, username, **kwargs):
         self.username = username
@@ -212,6 +212,7 @@ class AppScreen(QWidget):
     def show_user_menu(self):
         self.user_menu.exec_(self.select_user.mapToGlobal(QPoint(-60, self.select_user.height() + 5)))
 
+
     def send_message(self):
         text = self.input_field.text().strip()
         if text:
@@ -219,6 +220,7 @@ class AppScreen(QWidget):
             self.input_field.clear()
             # self.display_reply_from_system(text)
             self.user_message_signal.emit(text)
+
 
     def translate_process(self, es_text, button):
         # unclick other buttons
@@ -250,9 +252,11 @@ class AppScreen(QWidget):
             self.translated_result.setWordWrap(False)
             self.translated_result.setMaximumWidth((text_width))
 
+
     async def translate_from_spanish(self, es_text):
         translated = await self.translator.translate(es_text)
         return translated.text
+
 
     def display_reply_from_system(self, system_reply):
         reply_status = system_reply['status']

@@ -1,11 +1,13 @@
 background_color = '#3B4252'
 inputbackground = '#8cb7a4'
 
+
 label_style = '''
     border: none;
     font-weight: bold;
     font-size: 14px;
 '''
+
 
 input_style = '''
     QLineEdit{
@@ -22,6 +24,7 @@ input_style = '''
         border: 2px solid #81A1C1;
     }
 '''
+
 
 login_button_style = '''
     QPushButton {
@@ -42,6 +45,7 @@ login_button_style = '''
         background-color: #4e6f97;
     }
 '''
+
 
 borderless_button_style = '''
     QPushButton {
@@ -71,6 +75,7 @@ login_container_style = '''
     }
 '''
 
+
 error_label_style = '''
     color: red;
     border: none;
@@ -85,6 +90,7 @@ signup_label_style = '''
     color: black;
     font-size: 14px;
 '''
+
 
 signup_button_style = '''
     QPushButton {
@@ -106,6 +112,7 @@ signup_button_style = '''
     }
 '''
 
+
 signup_entry_style = '''
     QLineEdit{
         background-color: #8cb7a4;
@@ -122,9 +129,11 @@ signup_entry_style = '''
     }
 '''
 
+
 signup_radio_button_style = '''
     background-color: #8cb7a4;
 '''
+
 
 password_view_button_style = '''
     QPushButton {
@@ -139,7 +148,5 @@ password_view_button_style = '''
     QPushButton:pressed { 
         background-color: #699582;
     }
-    
-    
 '''
 

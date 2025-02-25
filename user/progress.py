@@ -1,8 +1,6 @@
-
 import json
 
 progress_json = 'user/progress.json'
-# progress_json = 'progress.json'
 
 def read_progress_json():
     with open(progress_json, 'r') as fid:
@@ -33,10 +31,6 @@ def add_completed_lesson_to_user(username, lesson):
         if lesson not in json_data[username]['completed-lessons']:
             json_data[username]['completed-lessons'].append(lesson)
     save_progress_json(json_data)
-
-
-
-
 
 
 if __name__ == '__main__':

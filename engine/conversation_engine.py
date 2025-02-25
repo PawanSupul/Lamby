@@ -27,15 +27,12 @@ class ConversationEngine(QObject):
             output = {'status': 0, 'text': '¡Adiós! ¡Que tengas un buen día!'}
         else:
             self.conversation_history.append({"role": "user", "content": user_text})
-
-            print(f'topic: {self.lesson}')
-
+            # print(f'topic: {self.lesson}')
             system_instruction = (
                 "Teach Spanish to beginners through simple conversation. "
                 "Speak in Spanish, use simple words, correct mistakes in English, and reply in English only when necessary."
                 f"Focus the conversation around: {self.lesson}."
             )
-
             response = openai.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[
@@ -48,8 +45,6 @@ class ConversationEngine(QObject):
             bot_reply = response.choices[0].message.content
             self.conversation_history.append({"role": "assistant", "content": bot_reply})
             output = {'status': 1, 'text': bot_reply}
-
-        # return output
         self.response_ready.emit(output)
 
 

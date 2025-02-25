@@ -1,13 +1,11 @@
 import asyncio
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QButtonGroup, QLabel
 
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QButtonGroup, QLabel
 
 class ToggleButtonGroup(QWidget):
     def __init__(self):
         super().__init__()
-
         self.setWindowTitle("Toggle Button Group")
-
         layout = QVBoxLayout()
 
         # Create a label to show the selected button
@@ -43,24 +41,21 @@ class ToggleButtonGroup(QWidget):
 
         self.setLayout(layout)
 
+
     def button_clicked(self, button_id):
         selected_button = self.button_group.button(button_id)
         self.label.setText(f"Selected: {selected_button.text()}")
 
-# # Run the application
-# app = QApplication([])
-# window = ToggleButtonGroup()
-# window.show()
-# app.exec_()
 
 from googletrans import Translator
+
 
 async def translate_text():
     translator = Translator()
     translated = await translator.translate('me gusta manzanas')
     return translated.text
 
-if __name__ == '__main__':
 
+if __name__ == '__main__':
     tr = asyncio.run(translate_text())
     print(f'translated: {tr}')

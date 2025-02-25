@@ -27,7 +27,6 @@ class MainWindow(QStackedWidget):
         self.addWidget(self.load_screen)
         self.addWidget(self.app_screen)
 
-        # self.load_screen.set_username('test')
         self.setCurrentWidget(self.login_screen)
 
 

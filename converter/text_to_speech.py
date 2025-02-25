@@ -1,6 +1,5 @@
 import pyttsx3
 
-
 class TextToSpeech_Microsoft():
     def __init__(self):
         # Initialize TTS engine

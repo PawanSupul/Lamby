@@ -164,6 +164,7 @@ class SignUpScreen(QWidget):
         self.signup_button.clicked.connect(self.handle_signup)
         self.cancel_button.clicked.connect(self.handle_cancel)
 
+
     def toggle_view_password_1(self):
         if(self.pw_1_show == False):
             self.pw_1_show = True
@@ -173,6 +174,7 @@ class SignUpScreen(QWidget):
             self.pw_1_show = False
             self.password_1_entry.setEchoMode(QLineEdit.Password)
             self.password_1_view.setIcon(QIcon('images/unhide.png'))
+
 
     def toggle_view_password_2(self):
         if (self.pw_2_show == False):
@@ -223,6 +225,7 @@ class SignUpScreen(QWidget):
             self.username_validate = False
             self.error_username_label.show()
 
+
     def validate_password(self):
         password_1 = self.password_1_entry.text()
         password_2 = self.password_2_entry.text()
@@ -235,6 +238,7 @@ class SignUpScreen(QWidget):
             self.error_password_label.show()
             self.password_validated = False
 
+
     def get_gender(self):
         if self.radio_male.isChecked():
             gender = 'Male'
@@ -245,6 +249,7 @@ class SignUpScreen(QWidget):
         else:
             gender = 'Other'
         return gender
+
 
     def handle_signup(self):
         if (self.age_validated and self.password_validated and self.username_validate):

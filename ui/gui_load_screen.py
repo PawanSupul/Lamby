@@ -1,9 +1,7 @@
-from PyQt5.QtWidgets import (
-    QApplication, QDialog, QVBoxLayout, QHBoxLayout, QLabel, QScrollArea, QSizePolicy,
-    QLineEdit, QComboBox, QPushButton, QMessageBox, QMainWindow, QWidget, QFrame, QGroupBox, QMenu
-)
+from PyQt5.QtWidgets import ( QVBoxLayout, QHBoxLayout, QLabel, QScrollArea, QPushButton,
+                              QWidget, QFrame, QMenu )
 from PyQt5.QtCore import Qt, QSize, QPoint
-from PyQt5.QtGui import QPainter, QPen, QIcon
+from PyQt5.QtGui import QIcon
 import pandas as pd
 import numpy as np
 import random
@@ -87,7 +85,6 @@ class LoadScreen(QWidget):
         self.scroll_content.setStyleSheet(scroll_content_style)
         self.scroll_layout = QVBoxLayout()
         self.scroll_layout.setAlignment(Qt.AlignTop)
-        # self.scroll_layout.setContentsMargins(0, 0, 0, 0)
 
         # Set layout for the scrollable content
         self.scroll_content.setLayout(self.scroll_layout)
@@ -159,7 +156,7 @@ class LoadScreen(QWidget):
                     index += 1
                 lesson_container.addLayout(getattr(self, f'lesson_row_{r}_layout'))
             setattr(self, f'lesson_row_{r+1}_layout', QHBoxLayout())
-            # remaining = total_lessons - (index)
+
             if total_lessons%self.num_lesson_columns != 0:
                 for c in range(3):
                     if index < total_lessons:
@@ -201,10 +198,8 @@ class LoadScreen(QWidget):
         list_sections = self.story_df.loc[:, 'section'].unique().tolist()
         hide_sections = [x for x in list_sections if x != section_num]
         for section in hide_sections:
-            getattr(self, f'lesson_container_section_{section}').hide()       # setStyleSheet('color: red; border-radius: 10px;')
-            # getattr(self, f'section_button_{section}').setStyleSheet('QPushButoon{ border: none; }')
+            getattr(self, f'lesson_container_section_{section}').hide() 
         getattr(self, f'lesson_container_section_{section_num}').show()
-        # getattr(self, f'section_button_{section_num}').setStyleSheet('QPushButoon{ border: 2px solid red; }')
 
         for section in list_sections:
             if(section in hide_sections):
@@ -225,6 +220,7 @@ class LoadScreen(QWidget):
         lesson_description = self.story_df.loc[self.story_df.loc[:, 'lesson'] == lesson_num, 'description'].values[0]
         self.go_to_named_screen('app', username=self.username, lesson=lesson_description, lesson_num=lesson_num, mode='story')
 
+
     def update_story_line_progress(self):
         for idx, section in enumerate(self.incomplete_sections):
             button = getattr(self, f'section_button_{section}')
@@ -242,6 +238,7 @@ class LoadScreen(QWidget):
         for idx, lesson in enumerate(self.completed_lessons):
             button = getattr(self, f'lesson_button_{lesson}')
             update_lesson_buttons_styles(button, 0)
+
 
     def get_lessons_of_section(self, section_num):
         lesson_df = self.story_df.loc[self.story_df.loc[:, 'section'] == section_num, ['lesson', 'sub lesson', 'description']]
@@ -261,16 +258,20 @@ class LoadScreen(QWidget):
 
         return completed_sections, ongoing_sections, incomplete_sections, completed_lessons, incomplete_lessons
 
+
     def show_user_menu(self):
         self.user_menu.exec_(self.select_user.mapToGlobal(QPoint(-60, self.select_user.height() + 5)))
+
 
     def handle_go_back(self):
         print('Go back')
         self.go_to_named_screen('login', username=self.username)
 
+
     def handle_logout(self):
         print('log out')
         self.go_to_named_screen('login', username=self.username)
+
 
     def initiation_protocol(self):
         gender = get_gender_for_user(self.username).lower()

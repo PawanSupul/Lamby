@@ -24,7 +24,6 @@ def save_credentials_when_signup(input_dict):
     gender = input_dict['gender']
     username = input_dict['username']
     password = input_dict['password']
-    # password_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
     password_hash = password
     today_date = str(datetime.datetime.today().date())
     credentials = load_credentials_file()
@@ -131,10 +130,7 @@ def get_gender_for_user(username):
 
 """ Notes
 1. Remove current user if the last login is more than 3 months
-
-
 """
-
 
 
 if __name__ == '__main__':

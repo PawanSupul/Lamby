@@ -5,8 +5,7 @@ from PyQt5.QtGui import QIcon, QIntValidator
 from PyQt5.QtCore import Qt, QSize
 from user.credential import verify_user, get_all_registered_users, update_current_user, get_current_user, get_password_for_user
 from ui.styles_login_screen import *
-from functools import partial
-from user.credential import save_credentials_when_signup
+
 
 class LoginScreen(QWidget):
     def __init__(self, go_to_named_screen):
@@ -14,7 +13,6 @@ class LoginScreen(QWidget):
         self.go_to_named_screen = go_to_named_screen
         self.make_login_screen()
         self.initiation_protocol()
-
 
 
     def make_login_screen(self):
@@ -93,8 +91,6 @@ class LoginScreen(QWidget):
         self.login_container.setFixedSize(550, 450)
         self.login_container.setStyleSheet(login_container_style)
 
-
-        # self.central_widget.setLayout(self.login_layout)
         self.main_login_layout = QVBoxLayout()
         self.main_login_layout.addWidget(self.login_container, alignment=Qt.AlignCenter)
 
@@ -134,6 +130,7 @@ class LoginScreen(QWidget):
             else:
                 print('error')
 
+
     def validate_username(self):
         username = self.username_input.text()
         if (username == ''):
@@ -146,6 +143,7 @@ class LoginScreen(QWidget):
             self.username_error_label.hide()
             self.username_validated = True
 
+
     def toggle_view_password(self):
         if (self.pw_show == False):
             self.pw_show = True
@@ -156,9 +154,11 @@ class LoginScreen(QWidget):
             self.password_input.setEchoMode(QLineEdit.Password)
             self.password_view.setIcon(QIcon('images/unhide.png'))
 
+
     def set_username_error(self, text):
         self.username_error_label.setText(text)
         self.username_error_label.show()
+
 
     def set_password_error(self, text):
         self.password_error_label.setText(text)
@@ -167,6 +167,7 @@ class LoginScreen(QWidget):
 
     def handle_forgot_password(self):
         self.go_to_named_screen('signup')
+
 
     def handle_sign_up(self):
         self.go_to_named_screen('signup')
@@ -202,8 +203,10 @@ class LoginScreen(QWidget):
         self.username_input.setText(username)
         self.password_input.setText(password)
 
+
     def set_username(self, username):
         self.current_user = username
+
 
     def initiation_protocol(self):
         self.username_error_label.hide()
