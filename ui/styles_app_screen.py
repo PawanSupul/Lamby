@@ -161,11 +161,12 @@ send_text_button_style = """
 
 translated_message_style = """
     QLabel {
-        background-color: #c0dbff; 
-        color: red;
+        background-color: transparent;
+        color: #000080; /*Navy*/
         padding: 8px; 
         letter-spacing: 0.1em;
-        border-radius: 10px;
+        border-radius: 20px;
+        border: 2px solid #000080;
     }
 """
 
@@ -206,11 +207,17 @@ system_message_style = """
     border-bottom-right-radius: 15px;
 """
 
+scroll_content_style = """
+    background-color: transparent; /*#e2d9d2;*/ 
+    border:none;
+"""
+
 
 scrollbar_style = """
     QScrollArea {
         border: 2px solid transparent;
         border-radius: 5px;
+        background-color: transparent;
     }
     
     QScrollBar:vertical {

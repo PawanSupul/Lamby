@@ -136,7 +136,8 @@ class AppScreen(QWidget):
         self.scroll_area = QScrollArea()
         self.scroll_area.setWidgetResizable(True)
         self.scroll_content = QWidget()
-        self.scroll_content.setStyleSheet("background-color: #e2d9d2; border:none")
+        # 'background-image: url(image/wallpapers/beige_test_1.png);'
+        self.scroll_content.setStyleSheet(scroll_content_style)
         self.scroll_layout = QVBoxLayout(self.scroll_content)
         self.scroll_layout.setAlignment(Qt.AlignTop)
         self.scroll_area.setWidget(self.scroll_content)
@@ -170,14 +171,15 @@ class AppScreen(QWidget):
         self.send_text_button.setIconSize(self.send_text_button.size() - QSize(20, 20))
         self.send_text_button.setStyleSheet(send_text_button_style)
         self.send_text_button.setShortcut("Return")
+        self.send_text_button.hide()
 
 
         self.input_button_set_layout = QHBoxLayout()
         self.input_button_set_layout.addWidget(self.send_button_en)
         self.input_button_set_layout.addWidget(self.send_button_es)
         self.input_button_set_layout.addWidget(self.send_text_button)
-        self.send_button_es.hide()
-        self.send_button_en.hide()
+        # self.send_button_es.hide()
+        # self.send_button_en.hide()
 
         self.input_layout.addWidget(self.input_field)
         self.input_layout.addLayout(self.input_button_set_layout)
