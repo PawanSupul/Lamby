@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import (QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QSizePolicy,
-                             QScrollArea, QLineEdit, QButtonGroup, QMenu)
+                             QScrollArea, QLineEdit, QButtonGroup, QMenu, QMainWindow)
 from PyQt5.QtGui import QFontMetrics, QFont, QIcon
 from PyQt5.QtCore import (Qt, QSize, QTimer, QThread, pyqtSignal, QPoint)
 
@@ -59,6 +59,7 @@ class AppScreen(QWidget):
         self.main_layout = QVBoxLayout(self)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.main_layout.setSpacing(0)
+
         # menu area
         self.menu_layout = QHBoxLayout()
         self.menu_layout.setContentsMargins(15, 0, 15, 0)
@@ -136,7 +137,6 @@ class AppScreen(QWidget):
         self.scroll_area = QScrollArea()
         self.scroll_area.setWidgetResizable(True)
         self.scroll_content = QWidget()
-        # 'background-image: url(image/wallpapers/beige_test_1.png);'
         self.scroll_content.setStyleSheet(scroll_content_style)
         self.scroll_layout = QVBoxLayout(self.scroll_content)
         self.scroll_layout.setAlignment(Qt.AlignTop)
@@ -186,13 +186,18 @@ class AppScreen(QWidget):
         self.input_container = QWidget()
         self.input_container.setLayout(self.input_layout)
 
+
         # Add widget to main layout
         self.main_layout.addWidget(self.menu_container)
         self.main_layout.addWidget(self.translated_result)
         self.main_layout.addWidget(self.scroll_area)
         self.main_layout.addWidget(self.input_container)
-
+        self.main_content_widget = QWidget()
+        # self.main_content_widget.setLayout(self.main_layout)
+        # self.main_content_widget.setStyleSheet("background-image: url('images/wallpapers/beige_1.jpg'); background-position: center;")
+        # self.main_content_widget.setStyleSheet('background-color: red;')
         self.setLayout(self.main_layout)
+        # self.setCentralWidget(self.main_content_widget)
 
         # Button click events
         self.clear_button.clicked.connect(self.handle_clear)

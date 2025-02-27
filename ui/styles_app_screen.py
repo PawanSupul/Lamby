@@ -207,8 +207,9 @@ system_message_style = """
     border-bottom-right-radius: 15px;
 """
 
+
 scroll_content_style = """
-    background-color: transparent; /*#e2d9d2;*/ 
+    background-color: transparent; /*#e2d9d2;*/
     border:none;
 """
 
