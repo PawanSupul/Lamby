@@ -86,6 +86,7 @@ error_label_style = '''
 
 
 signup_label_style = '''
+    border: none;
     padding: 0px;
     color: black;
     font-size: 14px;
@@ -150,3 +151,10 @@ password_view_button_style = '''
     }
 '''
 
+signup_details_frame_style = """
+    QFrame { 
+        border: 1px solid #5E81AC; 
+        padding: 10px; 
+        margin: 0px;
+    }
+"""

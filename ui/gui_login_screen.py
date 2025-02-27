@@ -1,6 +1,6 @@
 import datetime
 
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QFrame, QLabel, QLineEdit, QCheckBox, QPushButton
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QFrame, QLabel, QLineEdit, QCheckBox, QPushButton, QSizePolicy
 from PyQt5.QtGui import QIcon, QIntValidator
 from PyQt5.QtCore import Qt, QSize
 from user.credential import verify_user, get_all_registered_users, update_current_user, get_current_user, get_password_for_user
@@ -17,6 +17,11 @@ class LoginScreen(QWidget):
 
     def make_login_screen(self):
         self.login_layout = QVBoxLayout()
+
+        self.topic_label = QLabel("Sign-in to Lamby")
+        self.topic_label.setStyleSheet("color: navy; font-size: 26px; padding: 0px; margin: 10px")
+        self.topic_label.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        self.topic_label.setAlignment(Qt.AlignCenter)
 
         self.username_layout = QHBoxLayout()
         self.username_label = QLabel("Username: ")
@@ -81,6 +86,7 @@ class LoginScreen(QWidget):
         self.username_password_frame.setLayout(self.username_password_layout)
         self.username_password_frame.setStyleSheet("QFrame { border: 1px solid #5E81AC; }")
 
+        self.login_layout.addWidget(self.topic_label)
         self.login_layout.addWidget(self.username_password_frame)
         self.login_layout.addWidget(self.login_button)
         self.login_layout.addLayout(self.signup_layout)
@@ -88,7 +94,7 @@ class LoginScreen(QWidget):
 
         self.login_container = QFrame()
         self.login_container.setLayout(self.login_layout)
-        self.login_container.setFixedSize(550, 450)
+        self.login_container.setFixedSize(550, 490)
         self.login_container.setStyleSheet(login_container_style)
 
         self.main_login_layout = QVBoxLayout()

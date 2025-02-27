@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import (QVBoxLayout, QHBoxLayout, QWidget, QFrame, QLabel, QLineEdit, QPushButton,
-                             QRadioButton, QButtonGroup)
+                             QRadioButton, QButtonGroup, QSizePolicy)
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QSize
 from ui.styles_login_screen import *
@@ -23,7 +23,7 @@ class SignUpScreen(QWidget):
 
         topic = QLabel("Sign-up for Lamby")
         topic.setAlignment(Qt.AlignCenter)
-        topic.setMaximumHeight(80)
+        topic.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
         topic.setStyleSheet("color: navy; font-size: 26px;")
 
         self.name_layout = QHBoxLayout()
@@ -133,18 +133,26 @@ class SignUpScreen(QWidget):
         self.error_form_label.setMaximumHeight(20)
         self.error_form_label.hide()
 
+        self.username_password_layout = QVBoxLayout()
+        self.username_password_layout.addLayout(self.name_layout)
+        self.username_password_layout.addLayout(self.age_layout)
+        self.username_password_layout.addWidget(self.error_age_label)
+        self.username_password_layout.addLayout(self.gender_layout)
+        self.username_password_layout.addLayout(self.username_layout)
+        self.username_password_layout.addWidget(self.error_username_label)
+        self.username_password_layout.addLayout(self.password_1_layout)
+        self.username_password_layout.addLayout(self.password_2_layout)
+        self.username_password_layout.addWidget(self.error_password_label)
+
+        self.details_frame = QFrame()
+        self.details_frame.setLayout(self.username_password_layout)
+        self.details_frame.setStyleSheet(signup_details_frame_style)
+
         self.signup_layout.addWidget(topic, alignment=Qt.AlignHCenter)
-        self.signup_layout.addLayout(self.name_layout)
-        self.signup_layout.addLayout(self.age_layout)
-        self.signup_layout.addWidget(self.error_age_label)
-        self.signup_layout.addLayout(self.gender_layout)
-        self.signup_layout.addLayout(self.username_layout)
-        self.signup_layout.addWidget(self.error_username_label)
-        self.signup_layout.addLayout(self.password_1_layout)
-        self.signup_layout.addLayout(self.password_2_layout)
-        self.signup_layout.addWidget(self.error_password_label)
+        self.signup_layout.addWidget(self.details_frame)
         self.signup_layout.addLayout(self.button_layout)
         self.signup_layout.addWidget(self.error_form_label)
+        self.signup_layout.setSpacing(20)
 
         self.signup_container = QFrame()
         self.signup_container.setLayout(self.signup_layout)
