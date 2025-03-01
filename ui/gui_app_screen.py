@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import (QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QSizePolicy,
+from PyQt6.QtWidgets import (QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QSizePolicy,
                              QScrollArea, QLineEdit, QButtonGroup, QMenu, QMainWindow)
-from PyQt5.QtGui import QFontMetrics, QFont, QIcon
-from PyQt5.QtCore import (Qt, QSize, QTimer, QThread, pyqtSignal, QPoint, QEvent)
+from PyQt6.QtGui import QFontMetrics, QFont, QIcon
+from PyQt6.QtCore import (Qt, QSize, QTimer, QThread, pyqtSignal, QPoint, QEvent)
 
 from functools import partial
 import asyncio
@@ -36,7 +36,7 @@ class AppScreen(QMainWindow):
         self.previous_translation_dest = ''
         self.dialog_threshold_for_lesson_complete = 1
         self.clicked_button_id = None
-
+        print('made app screen')
 
     def set_information(self, username, **kwargs):
         self.username = username
@@ -130,7 +130,7 @@ class AppScreen(QMainWindow):
         self.translated_result = QLabel('This is the translated result')
         self.translated_result.setFont(QFont('Helvetica', 15))
         self.translated_result.setStyleSheet(translated_message_style)
-        self.translated_result.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        self.translated_result.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         self.translated_result.hide()
 
         # Scrollable chat area
@@ -139,7 +139,7 @@ class AppScreen(QMainWindow):
         self.scroll_content = QWidget()
         self.scroll_content.setStyleSheet(scroll_content_style)
         self.scroll_layout = QVBoxLayout(self.scroll_content)
-        self.scroll_layout.setAlignment(Qt.AlignTop)
+        self.scroll_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.scroll_area.setWidget(self.scroll_content)
         self.scroll_area.setStyleSheet(scrollbar_style)
 
@@ -215,14 +215,14 @@ class AppScreen(QMainWindow):
         self.send_button_en.clicked.connect(partial(self.animate_button, self.send_button_en))
         self.send_button_es.clicked.connect(partial(self.animate_button, self.send_button_es))
 
-        self.user_message_signal.connect(self.conversation_engine.get_conversation_reply, Qt.QueuedConnection)
-        self.reset_chat_signal.connect(self.conversation_engine.reset_conversation, Qt.QueuedConnection)
+        self.user_message_signal.connect(self.conversation_engine.get_conversation_reply, Qt.ConnectionType.QueuedConnection)
+        self.reset_chat_signal.connect(self.conversation_engine.reset_conversation, Qt.ConnectionType.QueuedConnection)
         self.conversation_engine.response_ready.connect(self.display_reply_from_system)
         self.conversation_engine.reset_success.connect(self.successful_reset)
 
 
     def eventFilter(self, obj, event):
-        if obj == self.main_content_widget and event.type() == QEvent.Resize:
+        if obj == self.main_content_widget and event.type() == QEvent.Type.Resize:
             self.background_label.setGeometry(self.main_content_widget.rect())
         return super().eventFilter(obj, event)
 
@@ -310,7 +310,7 @@ class AppScreen(QMainWindow):
         translate_button.setCheckable(True)
         translate_button.clicked.connect(partial(self.translate_process, text, translate_button))
 
-        message_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        message_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         message_layout = QHBoxLayout()
         if sender == "user":
             message_label.setStyleSheet(user_message_style)

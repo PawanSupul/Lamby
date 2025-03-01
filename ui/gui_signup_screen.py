@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import (QVBoxLayout, QHBoxLayout, QWidget, QFrame, QLabel, QLineEdit, QPushButton,
+from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QWidget, QFrame, QLabel, QLineEdit, QPushButton,
                              QRadioButton, QButtonGroup, QSizePolicy)
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import Qt, QSize
+from PyQt6.QtGui import QIcon
+from PyQt6.QtCore import Qt, QSize
 from ui.styles_login_screen import *
 from user.credential import save_credentials_when_signup, get_all_registered_users, get_current_user
 
@@ -22,8 +22,8 @@ class SignUpScreen(QWidget):
         self.signup_layout = QVBoxLayout()
 
         topic = QLabel("Sign-up for Lamby")
-        topic.setAlignment(Qt.AlignCenter)
-        topic.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        topic.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        topic.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         topic.setStyleSheet("color: navy; font-size: 26px;")
 
         self.name_layout = QHBoxLayout()
@@ -79,7 +79,7 @@ class SignUpScreen(QWidget):
         password_1_label.setFixedWidth(self.label_width)
         password_1_label.setStyleSheet(signup_label_style)
         self.password_1_entry = QLineEdit()
-        self.password_1_entry.setEchoMode(QLineEdit.Password)
+        self.password_1_entry.setEchoMode(QLineEdit.EchoMode.Password)
         self.password_1_entry.setStyleSheet(signup_entry_style)
         self.password_1_view = QPushButton()
         self.password_1_layout.addWidget(password_1_label)
@@ -89,7 +89,7 @@ class SignUpScreen(QWidget):
         password_2_label.setFixedWidth(self.label_width)
         password_2_label.setStyleSheet(signup_label_style)
         self.password_2_entry = QLineEdit()
-        self.password_2_entry.setEchoMode(QLineEdit.Password)
+        self.password_2_entry.setEchoMode(QLineEdit.EchoMode.Password)
         self.password_2_entry.setStyleSheet(signup_entry_style)
         self.password_2_view = QPushButton()
         self.password_2_layout.addWidget(password_2_label)
@@ -114,22 +114,22 @@ class SignUpScreen(QWidget):
 
         self.error_age_label = QLabel('You must be 18 years or older to sign up!')
         self.error_age_label.setStyleSheet(error_label_style)
-        self.error_age_label.setAlignment(Qt.AlignCenter)
+        self.error_age_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.error_age_label.setMaximumHeight(20)
         self.error_age_label.hide()
         self.error_username_label = QLabel('Username already exists. Use a different username!')
         self.error_username_label.setStyleSheet(error_label_style)
-        self.error_username_label.setAlignment(Qt.AlignCenter)
+        self.error_username_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.error_username_label.setMaximumHeight(20)
         self.error_username_label.hide()
         self.error_password_label = QLabel('Passwords do NOT match!')
         self.error_password_label.setStyleSheet(error_label_style)
-        self.error_password_label.setAlignment(Qt.AlignCenter)
+        self.error_password_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.error_password_label.setMaximumHeight(20)
         self.error_password_label.hide()
         self.error_form_label = QLabel('Form error')
         self.error_form_label.setStyleSheet(error_label_style)
-        self.error_form_label.setAlignment(Qt.AlignCenter)
+        self.error_form_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.error_form_label.setMaximumHeight(20)
         self.error_form_label.hide()
 
@@ -148,7 +148,7 @@ class SignUpScreen(QWidget):
         self.details_frame.setLayout(self.username_password_layout)
         self.details_frame.setStyleSheet(signup_details_frame_style)
 
-        self.signup_layout.addWidget(topic, alignment=Qt.AlignHCenter)
+        self.signup_layout.addWidget(topic, alignment=Qt.AlignmentFlag.AlignHCenter)
         self.signup_layout.addWidget(self.details_frame)
         self.signup_layout.addLayout(self.button_layout)
         self.signup_layout.addWidget(self.error_form_label)
@@ -160,7 +160,7 @@ class SignUpScreen(QWidget):
         self.signup_container.setStyleSheet(login_container_style)
 
         self.main_signup_layout = QVBoxLayout()
-        self.main_signup_layout.addWidget(self.signup_container, alignment=Qt.AlignCenter)
+        self.main_signup_layout.addWidget(self.signup_container, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.setLayout(self.main_signup_layout)
 
@@ -176,22 +176,22 @@ class SignUpScreen(QWidget):
     def toggle_view_password_1(self):
         if(self.pw_1_show == False):
             self.pw_1_show = True
-            self.password_1_entry.setEchoMode(QLineEdit.Normal)
+            self.password_1_entry.setEchoMode(QLineEdit.EchoMode.Normal)
             self.password_1_view.setIcon(QIcon('images/hide.png'))
         else:
             self.pw_1_show = False
-            self.password_1_entry.setEchoMode(QLineEdit.Password)
+            self.password_1_entry.setEchoMode(QLineEdit.EchoMode.Password)
             self.password_1_view.setIcon(QIcon('images/unhide.png'))
 
 
     def toggle_view_password_2(self):
         if (self.pw_2_show == False):
             self.pw_2_show = True
-            self.password_2_entry.setEchoMode(QLineEdit.Normal)
+            self.password_2_entry.setEchoMode(QLineEdit.EchoMode.Normal)
             self.password_2_view.setIcon(QIcon('images/hide.png'))
         else:
             self.pw_2_show = False
-            self.password_2_entry.setEchoMode(QLineEdit.Password)
+            self.password_2_entry.setEchoMode(QLineEdit.EchoMode.Password)
             self.password_2_view.setIcon(QIcon('images/unhide.png'))
 
 

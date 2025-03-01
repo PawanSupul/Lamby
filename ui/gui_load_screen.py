@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import ( QVBoxLayout, QHBoxLayout, QLabel, QScrollArea, QPushButton,
+from PyQt6.QtWidgets import ( QVBoxLayout, QHBoxLayout, QLabel, QScrollArea, QPushButton,
                               QWidget, QFrame, QMenu, QMainWindow )
-from PyQt5.QtCore import Qt, QSize, QPoint, QEvent
-from PyQt5.QtGui import QIcon
+from PyQt6.QtCore import Qt, QSize, QPoint, QEvent
+from PyQt6.QtGui import QIcon
 import pandas as pd
 import numpy as np
 import random
@@ -21,14 +21,13 @@ class LoadScreen(QMainWindow):
         self.story_df = pd.read_excel('data/story_data/story.xlsx')
         self.num_lesson_columns = 3
         self.make_loading_screen()
-
+        print('made load screen')
 
     def set_username(self, username):
         self.username = username
 
 
     def make_loading_screen(self):
-        print('make load screen')
         self.load_layout = QVBoxLayout()
         self.load_layout.setContentsMargins(0, 0, 0, 0)
         self.load_layout.setSpacing(0)
@@ -56,11 +55,12 @@ class LoadScreen(QMainWindow):
         self.menu_layout.addStretch()
         self.menu_layout.addWidget(self.select_back)
         self.menu_layout.addWidget(self.select_user)
-
+        print('make load screen 2')
         self.menu_container = QWidget()
         self.menu_container.setStyleSheet(menu_style)  #
         self.menu_container.setFixedHeight(50)
         self.menu_container.setLayout(self.menu_layout)
+        print('make load screen 3')
 
         self.quick_start_layout = QHBoxLayout()
 
@@ -78,14 +78,17 @@ class LoadScreen(QMainWindow):
         self.section_layout = QHBoxLayout()
         self.section_layout.setContentsMargins(00, 10, 0, 10)
 
-        self.scroll_area = QScrollArea()
+
+
+        print('make load screen 4')
+        self.scroll_area = QScrollArea(self)
         self.scroll_area.setWidgetResizable(True)
 
         self.scroll_content = QWidget()
         self.scroll_content.setStyleSheet(scroll_content_style)
         self.scroll_layout = QVBoxLayout()
-        self.scroll_layout.setAlignment(Qt.AlignTop)
-
+        self.scroll_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        print('make load screen 5')
         # Set layout for the scrollable content
         self.scroll_content.setLayout(self.scroll_layout)
         self.scroll_area.setWidget(self.scroll_content)
@@ -99,7 +102,7 @@ class LoadScreen(QMainWindow):
         self.storyline_container = QFrame()
         self.storyline_container.setStyleSheet(storyline_container_style)
         self.storyline_container.setLayout(self.storyline_layout)
-
+        print('make load screen 6')
         self.main_load_layout = QVBoxLayout()
         self.main_load_layout.addLayout(self.quick_start_layout)
         story_line_label = QLabel('Story Line')
@@ -111,20 +114,28 @@ class LoadScreen(QMainWindow):
 
         self.load_layout.addWidget(self.menu_container)
         self.load_layout.addLayout(self.main_load_layout)
-
+        print('make load screen 7')
         self.main_content_widget = QWidget()
+        print('make load screen 8')
         self.main_content_widget.setLayout(self.load_layout)
+        print('make load screen 9')
         self.background_label = QWidget(self.main_content_widget)
+        print('make load screen 10')
         self.background_label.setStyleSheet("border-image: url('images/wallpapers/beige_3.jpeg') repeat;")
+        print('make load screen 11')
         self.background_label.setGeometry(self.main_content_widget.rect())
+        print('make load screen 12')
         self.background_label.lower()
+        print('make load screen 13')
         self.main_content_widget.installEventFilter(self)
+        print('make load screen 14')
+        print(self.main_content_widget)
         self.setCentralWidget(self.main_content_widget)
-
+        print('make load screen 15')
         # self.setLayout(self.load_layout)
 
     def eventFilter(self, obj, event):
-        if obj == self.main_content_widget and event.type() == QEvent.Resize:
+        if obj == self.main_content_widget and event.type() == QEvent.Type.Resize:
             self.background_label.setGeometry(self.main_content_widget.rect())
         return super().eventFilter(obj, event)
 

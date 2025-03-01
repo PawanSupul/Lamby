@@ -1,8 +1,6 @@
-import datetime
-
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QFrame, QLabel, QLineEdit, QCheckBox, QPushButton, QSizePolicy
-from PyQt5.QtGui import QIcon, QIntValidator
-from PyQt5.QtCore import Qt, QSize
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QFrame, QLabel, QLineEdit, QCheckBox, QPushButton, QSizePolicy
+from PyQt6.QtGui import QIcon, QIntValidator
+from PyQt6.QtCore import Qt, QSize
 from user.credential import verify_user, get_all_registered_users, update_current_user, get_current_user, get_password_for_user
 from ui.styles_login_screen import *
 
@@ -20,8 +18,8 @@ class LoginScreen(QWidget):
 
         self.topic_label = QLabel("Sign-in to Lamby")
         self.topic_label.setStyleSheet("color: navy; font-size: 26px; padding: 0px; margin: 10px")
-        self.topic_label.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-        self.topic_label.setAlignment(Qt.AlignCenter)
+        self.topic_label.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        self.topic_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.username_layout = QHBoxLayout()
         self.username_label = QLabel("Username: ")
@@ -39,7 +37,7 @@ class LoginScreen(QWidget):
         self.password_label = QLabel("Password: ")
         self.password_label.setStyleSheet(label_style)
         self.password_input = QLineEdit()
-        self.password_input.setEchoMode(QLineEdit.Password)     # Hide password
+        self.password_input.setEchoMode(QLineEdit.EchoMode.Password)     # Hide password
         self.password_input.setStyleSheet(input_style)
         self.password_view = QPushButton()
         self.password_view.setIcon(QIcon('images/unhide.png'))
@@ -74,13 +72,13 @@ class LoginScreen(QWidget):
         self.username_password_layout = QVBoxLayout()
         self.username_error_layout = QVBoxLayout()
         self.username_error_layout.addLayout(self.username_layout)
-        self.username_error_layout.addWidget(self.username_error_label, alignment=Qt.AlignHCenter)
+        self.username_error_layout.addWidget(self.username_error_label, alignment=Qt.AlignmentFlag.AlignHCenter)
         self.password_error_layout = QVBoxLayout()
         self.password_error_layout.addLayout(self.password_layout)
-        self.password_error_layout.addWidget(self.password_error_label, alignment=Qt.AlignHCenter)
+        self.password_error_layout.addWidget(self.password_error_label, alignment=Qt.AlignmentFlag.AlignHCenter)
         self.username_password_layout.addLayout(self.username_error_layout)
         self.username_password_layout.addLayout(self.password_error_layout)
-        self.username_password_layout.addWidget(self.remember_me_checkbox, alignment=Qt.AlignHCenter)
+        self.username_password_layout.addWidget(self.remember_me_checkbox, alignment=Qt.AlignmentFlag.AlignHCenter)
 
         self.username_password_frame = QFrame()
         self.username_password_frame.setLayout(self.username_password_layout)
@@ -98,7 +96,7 @@ class LoginScreen(QWidget):
         self.login_container.setStyleSheet(login_container_style)
 
         self.main_login_layout = QVBoxLayout()
-        self.main_login_layout.addWidget(self.login_container, alignment=Qt.AlignCenter)
+        self.main_login_layout.addWidget(self.login_container, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.setLayout(self.main_login_layout)
 
@@ -153,11 +151,11 @@ class LoginScreen(QWidget):
     def toggle_view_password(self):
         if (self.pw_show == False):
             self.pw_show = True
-            self.password_input.setEchoMode(QLineEdit.Normal)
+            self.password_input.setEchoMode(QLineEdit.EchoMode.Normal)
             self.password_view.setIcon(QIcon('images/hide.png'))
         else:
             self.pw_show = False
-            self.password_input.setEchoMode(QLineEdit.Password)
+            self.password_input.setEchoMode(QLineEdit.EchoMode.Password)
             self.password_view.setIcon(QIcon('images/unhide.png'))
 
 

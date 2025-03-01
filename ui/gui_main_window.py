@@ -1,5 +1,5 @@
-from PyQt5.QtWidgets import QStackedWidget
-from PyQt5.QtGui import QPixmap
+from PyQt6.QtWidgets import QStackedWidget
+from PyQt6.QtGui import QPixmap
 
 from ui.gui_login_screen import LoginScreen
 from ui.gui_signup_screen import SignUpScreen
