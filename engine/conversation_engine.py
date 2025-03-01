@@ -2,8 +2,8 @@ import openai
 from PyQt6.QtCore import pyqtSignal, QObject
 
 class ConversationEngine(QObject):
-    response_ready = pyqtSignal(dict)
-    reset_success = pyqtSignal(str)
+    response_ready = pyqtSignal(dict, name='response_ready')
+    reset_success = pyqtSignal(str, name='reset_success')
     
     def __init__(self):
         super().__init__()

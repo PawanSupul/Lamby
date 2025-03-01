@@ -15,17 +15,17 @@ from converter.text_to_speech import TextToSpeech_Microsoft
 
 
 class AppScreen(QMainWindow):
-    user_message_signal = pyqtSignal(str)
-    reset_chat_signal = pyqtSignal()
+    user_message_signal = pyqtSignal(str, name='user_message_signal')
+    reset_chat_signal = pyqtSignal(name='reset_chat_signal')
 
 
     def __init__(self, go_to_named_screen):
-        super().__init__()
+        super().__init__(None)
         self.go_to_named_screen = go_to_named_screen
         self.translator = Translator()
         self.tranlator_loop = asyncio.get_event_loop()
         self.conversation_engine = ConversationEngine()
-        self.worker_thread = QThread()
+        self.worker_thread = QThread(self)
         self.conversation_engine.moveToThread(self.worker_thread)
         self.worker_thread.start()
         self.speech_to_text = SpeachToText()
@@ -36,7 +36,7 @@ class AppScreen(QMainWindow):
         self.previous_translation_dest = ''
         self.dialog_threshold_for_lesson_complete = 1
         self.clicked_button_id = None
-        print('made app screen')
+
 
     def set_information(self, username, **kwargs):
         self.username = username
@@ -60,9 +60,17 @@ class AppScreen(QMainWindow):
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.main_layout.setSpacing(0)
 
+        self.main_content_widget = QWidget(self)
+        self.main_content_widget.setLayout(self.main_layout)
+
         # menu area
         self.menu_layout = QHBoxLayout()
         self.menu_layout.setContentsMargins(15, 0, 15, 0)
+
+        self.menu_container = QWidget(self.main_content_widget)
+        self.menu_container.setStyleSheet(menu_style)
+        self.menu_container.setFixedHeight(50)
+        self.menu_container.setLayout(self.menu_layout)
 
         self.reset_button = QPushButton()
         self.reset_button.setIcon(QIcon('images/refresh.png'))
@@ -77,7 +85,7 @@ class AppScreen(QMainWindow):
         self.clear_button.setStyleSheet(clear_style)
 
         self.select_button_layout = QHBoxLayout()
-        self.select_button_group = QButtonGroup()
+        self.select_button_group = QButtonGroup(self.menu_container)
         self.select_button_group.setExclusive(True)
         self.select_vocal = QPushButton()
         self.select_vocal.setFixedSize(70, 40)
@@ -120,12 +128,7 @@ class AppScreen(QMainWindow):
         self.menu_layout.addWidget(self.select_back)
         self.menu_layout.addLayout(self.select_button_layout)
         self.menu_layout.addWidget(self.select_user)
-        # self.menu_layout.setSpacing(25)
         self.menu_layout.setSpacing(20)
-        self.menu_container = QWidget()
-        self.menu_container.setStyleSheet(menu_style)  #
-        self.menu_container.setFixedHeight(50)
-        self.menu_container.setLayout(self.menu_layout)
 
         self.translated_result = QLabel('This is the translated result')
         self.translated_result.setFont(QFont('Helvetica', 15))
@@ -134,9 +137,9 @@ class AppScreen(QMainWindow):
         self.translated_result.hide()
 
         # Scrollable chat area
-        self.scroll_area = QScrollArea()
+        self.scroll_area = QScrollArea(self.main_content_widget)
         self.scroll_area.setWidgetResizable(True)
-        self.scroll_content = QWidget()
+        self.scroll_content = QWidget(self.scroll_area)
         self.scroll_content.setStyleSheet(scroll_content_style)
         self.scroll_layout = QVBoxLayout(self.scroll_content)
         self.scroll_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
@@ -182,7 +185,7 @@ class AppScreen(QMainWindow):
 
         self.input_layout.addWidget(self.input_field)
         self.input_layout.addLayout(self.input_button_set_layout)
-        self.input_container = QWidget()
+        self.input_container = QWidget(self.main_content_widget)
         self.input_container.setLayout(self.input_layout)
         self.input_container.setStyleSheet("background-color: transparent;")
 
@@ -192,15 +195,11 @@ class AppScreen(QMainWindow):
         self.main_layout.addWidget(self.scroll_area)
         self.main_layout.addWidget(self.input_container)
 
-        self.main_content_widget = QWidget()
-        self.main_content_widget.setLayout(self.main_layout)
-
         self.background_label = QWidget(self.main_content_widget)
         self.background_label.setStyleSheet("border-image: url('images/wallpapers/beige_3.jpeg') repeat;")
         self.background_label.setGeometry(self.main_content_widget.rect())
         self.background_label.lower()
         self.main_content_widget.installEventFilter(self)
-
 
         self.setCentralWidget(self.main_content_widget)
 
@@ -326,6 +325,7 @@ class AppScreen(QMainWindow):
         message_container = QWidget()
         message_container.setLayout(message_layout)
         self.scroll_layout.addWidget(message_container)
+        # noinspection PyTypeChecker
         QTimer.singleShot(0, self.update_message_widths)
 
 
@@ -350,7 +350,7 @@ class AppScreen(QMainWindow):
                     else:
                         label.setWordWrap(False)
                         label.setMaximumWidth(text_width)
-
+        # noinspection PyTypeChecker
         QTimer.singleShot(0, lambda: self.scroll_area.verticalScrollBar().setValue(self.scroll_area.verticalScrollBar().maximum()))
 
 
@@ -380,7 +380,6 @@ class AppScreen(QMainWindow):
         print('clear button pressed')
         for i in range(self.scroll_layout.count()):
             widget = self.scroll_layout.itemAt(i).widget()
-            print(widget)
             widget.deleteLater()
 
 
@@ -390,9 +389,11 @@ class AppScreen(QMainWindow):
         print("""clear chatgpt memory and start anew""")
         self.reset_chat_signal.emit()
 
+
     def successful_reset(self, response):
         if(response == 'successful'):
             print('Acknowledge from engine')
+
 
     def handle_vocal_select(self):
         self.send_button_en.show()
@@ -410,6 +411,7 @@ class AppScreen(QMainWindow):
         print('Go back')
         self.handle_reset()
         self.go_to_named_screen('load', username=self.username)
+
 
     def handle_logout(self):
         print('log out')

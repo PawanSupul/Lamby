@@ -1,5 +1,5 @@
-from PyQt6.QtWidgets import ( QVBoxLayout, QHBoxLayout, QLabel, QScrollArea, QPushButton,
-                              QWidget, QFrame, QMenu, QMainWindow )
+from PyQt6.QtWidgets import ( QVBoxLayout, QHBoxLayout, QLabel, QScrollArea, QPushButton, QWidget,
+                              QFrame, QMenu, QMainWindow )
 from PyQt6.QtCore import Qt, QSize, QPoint, QEvent
 from PyQt6.QtGui import QIcon
 import pandas as pd
@@ -14,14 +14,16 @@ from ui.styles_load_screen import (scroll_content_style, section_button_style, s
                                    update_section_buttons_styles, update_lesson_buttons_styles)
 from functools import partial
 
+
 class LoadScreen(QMainWindow):
     def __init__(self, go_to_named_screen):
-        super().__init__()
+        super().__init__(None)
         self.go_to_named_screen = go_to_named_screen
         self.story_df = pd.read_excel('data/story_data/story.xlsx')
         self.num_lesson_columns = 3
         self.make_loading_screen()
         print('made load screen')
+
 
     def set_username(self, username):
         self.username = username
@@ -31,6 +33,14 @@ class LoadScreen(QMainWindow):
         self.load_layout = QVBoxLayout()
         self.load_layout.setContentsMargins(0, 0, 0, 0)
         self.load_layout.setSpacing(0)
+
+        self.main_content_widget = QWidget(self)
+        self.main_content_widget.setLayout(self.load_layout)
+        self.background_label = QWidget(self.main_content_widget)
+        self.background_label.setStyleSheet("border-image: url('images/wallpapers/beige_3.jpeg') repeat;")
+        self.background_label.setGeometry(self.main_content_widget.rect())
+        self.background_label.lower()
+        self.main_content_widget.installEventFilter(self)
 
         self.menu_layout = QHBoxLayout()
         self.menu_layout.setContentsMargins(10, 0, 10, 0)
@@ -55,12 +65,10 @@ class LoadScreen(QMainWindow):
         self.menu_layout.addStretch()
         self.menu_layout.addWidget(self.select_back)
         self.menu_layout.addWidget(self.select_user)
-        print('make load screen 2')
-        self.menu_container = QWidget()
-        self.menu_container.setStyleSheet(menu_style)  #
+        self.menu_container = QWidget(self.main_content_widget)
+        self.menu_container.setStyleSheet(menu_style)
         self.menu_container.setFixedHeight(50)
         self.menu_container.setLayout(self.menu_layout)
-        print('make load screen 3')
 
         self.quick_start_layout = QHBoxLayout()
 
@@ -78,17 +86,13 @@ class LoadScreen(QMainWindow):
         self.section_layout = QHBoxLayout()
         self.section_layout.setContentsMargins(00, 10, 0, 10)
 
-
-
-        print('make load screen 4')
         self.scroll_area = QScrollArea(self)
         self.scroll_area.setWidgetResizable(True)
-
-        self.scroll_content = QWidget()
+        self.scroll_content = QWidget(self.scroll_area)
         self.scroll_content.setStyleSheet(scroll_content_style)
         self.scroll_layout = QVBoxLayout()
         self.scroll_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-        print('make load screen 5')
+
         # Set layout for the scrollable content
         self.scroll_content.setLayout(self.scroll_layout)
         self.scroll_area.setWidget(self.scroll_content)
@@ -99,10 +103,9 @@ class LoadScreen(QMainWindow):
         self.storyline_layout.addLayout(self.section_layout)
         self.storyline_layout.addWidget(self.scroll_area)
 
-        self.storyline_container = QFrame()
+        self.storyline_container = QFrame(self.main_content_widget)
         self.storyline_container.setStyleSheet(storyline_container_style)
         self.storyline_container.setLayout(self.storyline_layout)
-        print('make load screen 6')
         self.main_load_layout = QVBoxLayout()
         self.main_load_layout.addLayout(self.quick_start_layout)
         story_line_label = QLabel('Story Line')
@@ -114,30 +117,15 @@ class LoadScreen(QMainWindow):
 
         self.load_layout.addWidget(self.menu_container)
         self.load_layout.addLayout(self.main_load_layout)
-        print('make load screen 7')
-        self.main_content_widget = QWidget()
-        print('make load screen 8')
-        self.main_content_widget.setLayout(self.load_layout)
-        print('make load screen 9')
-        self.background_label = QWidget(self.main_content_widget)
-        print('make load screen 10')
-        self.background_label.setStyleSheet("border-image: url('images/wallpapers/beige_3.jpeg') repeat;")
-        print('make load screen 11')
-        self.background_label.setGeometry(self.main_content_widget.rect())
-        print('make load screen 12')
-        self.background_label.lower()
-        print('make load screen 13')
-        self.main_content_widget.installEventFilter(self)
-        print('make load screen 14')
-        print(self.main_content_widget)
+
         self.setCentralWidget(self.main_content_widget)
-        print('make load screen 15')
-        # self.setLayout(self.load_layout)
+
 
     def eventFilter(self, obj, event):
         if obj == self.main_content_widget and event.type() == QEvent.Type.Resize:
             self.background_label.setGeometry(self.main_content_widget.rect())
         return super().eventFilter(obj, event)
+
 
     def add_section_and_lesson_bubbles(self):
         num_sections = self.story_df.loc[:, 'section'].unique().tolist()
@@ -151,7 +139,7 @@ class LoadScreen(QMainWindow):
 
             lesson_container = QVBoxLayout()
             lesson_container.setContentsMargins(10, 0, 10, 0)
-            section_lesson_container = QWidget()
+            section_lesson_container = QWidget(self.scroll_content)
             section_lesson_container.setLayout(lesson_container)
             section_lesson_container.setStyleSheet(section_lesson_container_style)
             self.scroll_layout.addWidget(section_lesson_container)
@@ -288,12 +276,10 @@ class LoadScreen(QMainWindow):
 
 
     def handle_go_back(self):
-        print('Go back')
         self.go_to_named_screen('login', username=self.username)
 
 
     def handle_logout(self):
-        print('log out')
         self.go_to_named_screen('login', username=self.username)
 
 

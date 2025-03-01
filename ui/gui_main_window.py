@@ -9,9 +9,9 @@ from ui.gui_app_screen import AppScreen
 
 class MainWindow(QStackedWidget):
     def __init__(self):
-        super().__init__()
+        super().__init__(None)
         self.setWindowTitle('Lamb conversationalist')
-        self.setGeometry(100, 100, 1500, 800)
+        self.setGeometry(100, 100, 1400, 700)
         self.setStyleSheet("background-color: #e2d9d2")
         self.default_pixmap = QPixmap('images/default_on_screen.png')
         self.clicked_button_id = None

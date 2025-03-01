@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QWidget, QFrame, QLabel, QLineEdit, QPushButton,
                              QRadioButton, QButtonGroup, QSizePolicy)
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QIcon, QIntValidator
 from PyQt6.QtCore import Qt, QSize
 from ui.styles_login_screen import *
 from user.credential import save_credentials_when_signup, get_all_registered_users, get_current_user
@@ -8,7 +8,7 @@ from user.credential import save_credentials_when_signup, get_all_registered_use
 
 class SignUpScreen(QWidget):
     def __init__(self, go_to_named_screen):
-        super().__init__()
+        super().__init__(None)
         self.go_to_named_screen = go_to_named_screen
         self.label_width = 130
         self.pw_1_show = False
@@ -21,10 +21,17 @@ class SignUpScreen(QWidget):
     def make_signup_page(self):
         self.signup_layout = QVBoxLayout()
 
+        self.signup_container = QFrame(self)
+        self.signup_container.setLayout(self.signup_layout)
+        self.signup_container.setFixedSize(550, 650)
+        self.signup_container.setStyleSheet(login_container_style)
+
         topic = QLabel("Sign-up for Lamby")
         topic.setAlignment(Qt.AlignmentFlag.AlignCenter)
         topic.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         topic.setStyleSheet("color: navy; font-size: 26px;")
+
+        self.details_frame = QFrame(self.signup_container)
 
         self.name_layout = QHBoxLayout()
         self.age_layout = QHBoxLayout()
@@ -58,7 +65,7 @@ class SignUpScreen(QWidget):
         self.radio_female.setStyleSheet(signup_radio_button_style)
         self.radio_other = QRadioButton("Other")
         self.radio_other.setStyleSheet(signup_radio_button_style)
-        self.gender_button_group = QButtonGroup()
+        self.gender_button_group = QButtonGroup(self.details_frame)
         self.gender_button_group.addButton(self.radio_male)
         self.gender_button_group.addButton(self.radio_female)
         self.gender_button_group.addButton(self.radio_other)
@@ -144,7 +151,6 @@ class SignUpScreen(QWidget):
         self.username_password_layout.addLayout(self.password_2_layout)
         self.username_password_layout.addWidget(self.error_password_label)
 
-        self.details_frame = QFrame()
         self.details_frame.setLayout(self.username_password_layout)
         self.details_frame.setStyleSheet(signup_details_frame_style)
 
@@ -153,11 +159,6 @@ class SignUpScreen(QWidget):
         self.signup_layout.addLayout(self.button_layout)
         self.signup_layout.addWidget(self.error_form_label)
         self.signup_layout.setSpacing(20)
-
-        self.signup_container = QFrame()
-        self.signup_container.setLayout(self.signup_layout)
-        self.signup_container.setFixedSize(550, 650)
-        self.signup_container.setStyleSheet(login_container_style)
 
         self.main_signup_layout = QVBoxLayout()
         self.main_signup_layout.addWidget(self.signup_container, alignment=Qt.AlignmentFlag.AlignCenter)

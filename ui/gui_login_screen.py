@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QFrame, QLabel, QLineEdit, QCheckBox, QPushButton, QSizePolicy
-from PyQt6.QtGui import QIcon, QIntValidator
+from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import Qt, QSize
 from user.credential import verify_user, get_all_registered_users, update_current_user, get_current_user, get_password_for_user
 from ui.styles_login_screen import *
@@ -7,7 +7,7 @@ from ui.styles_login_screen import *
 
 class LoginScreen(QWidget):
     def __init__(self, go_to_named_screen):
-        super().__init__()
+        super().__init__(None)
         self.go_to_named_screen = go_to_named_screen
         self.make_login_screen()
         self.initiation_protocol()
@@ -15,6 +15,11 @@ class LoginScreen(QWidget):
 
     def make_login_screen(self):
         self.login_layout = QVBoxLayout()
+
+        self.login_container = QFrame(self)
+        self.login_container.setLayout(self.login_layout)
+        self.login_container.setFixedSize(550, 490)
+        self.login_container.setStyleSheet(login_container_style)
 
         self.topic_label = QLabel("Sign-in to Lamby")
         self.topic_label.setStyleSheet("color: navy; font-size: 26px; padding: 0px; margin: 10px")
@@ -80,7 +85,7 @@ class LoginScreen(QWidget):
         self.username_password_layout.addLayout(self.password_error_layout)
         self.username_password_layout.addWidget(self.remember_me_checkbox, alignment=Qt.AlignmentFlag.AlignHCenter)
 
-        self.username_password_frame = QFrame()
+        self.username_password_frame = QFrame(self.login_container)
         self.username_password_frame.setLayout(self.username_password_layout)
         self.username_password_frame.setStyleSheet("QFrame { border: 1px solid #5E81AC; }")
 
@@ -89,11 +94,6 @@ class LoginScreen(QWidget):
         self.login_layout.addWidget(self.login_button)
         self.login_layout.addLayout(self.signup_layout)
         self.login_layout.setSpacing(20)
-
-        self.login_container = QFrame()
-        self.login_container.setLayout(self.login_layout)
-        self.login_container.setFixedSize(550, 490)
-        self.login_container.setStyleSheet(login_container_style)
 
         self.main_login_layout = QVBoxLayout()
         self.main_login_layout.addWidget(self.login_container, alignment=Qt.AlignmentFlag.AlignCenter)
