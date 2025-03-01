@@ -16,6 +16,16 @@ storyline_container_style = """
     border: 2px solid gray;
     border-radius: 10px;
     font-size: 14px;
+    background-color: transparent;
+"""
+
+storyline_label_style = """
+    font-size: 16px;
+    font-weight:bold; 
+    color: black; 
+    padding-top: 20px; 
+    padding-left:10px;
+    background-color: transparent;
 """
 
 
@@ -57,9 +67,11 @@ lesson_button_style = '''
 '''%(color_pending_normal, color_pending_hover, color_pending_press)
 
 
+
 hide_lesson_button_style = """
     border: none;
-    background: #e2d9d2;
+    /*background: #e2d9d2;*/
+    background: transparent;
 """
 
 
@@ -83,36 +95,36 @@ section_button_style = '''
 
 scrollbar_style = """
     QScrollArea {
-        /* border: 2px solid transparent;  Adds border to ScrollArea */
         border: none;
         border-radius: 20px;
-        background: #e2d9d2;
+        background-color: transparent;
     }
 
     QScrollBar:vertical {
         border: none;
-        background: #d7cfc7;  /* Light beige background  #d7cfc7 */ 
+        background: #d7cfc7;
         width: 12px;
-        margin: 0px 0px 0px 0px;        
+        margin: 0px 0px 0px 0px; 
+        border-radius: 6px; 
     }
-
+    
     QScrollBar::handle:vertical {
-         background: qlineargradient(                 
-             x1:0, y1:0, x2:1, y2:1,                  
-             /*stop:0 #A67C52, stop:1 #8B5E3C*/       
-             stop:0 #83b6a0, stop:1 #74a28e           
-         );                                           
+        background: qlineargradient(                 
+            x1:0, y1:0, x2:1, y2:1,                  
+            /*stop:0 #A67C52, stop:1 #8B5E3C*/       
+            stop:0 #83b6a0, stop:1 #74a28e           
+        ); 
         border: none;
         min-height: 20px;
         border-radius: 6px;  /* Rounded handle */
     }
 
     QScrollBar::handle:vertical:hover {
-         background: qlineargradient(             
-             x1:0, y1:0, x2:1, y2:1,              
-             stop:0 #8bc1a9, stop:1 #7eb09a      
-         );  /* Lighter brown when hovered */     
-         border: none;
+        background: qlineargradient(             
+            x1:0, y1:0, x2:1, y2:1,              
+            stop:0 #8bc1a9, stop:1 #7eb09a      
+        );  
+        border-radius: 6px;
     }
     
     QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
@@ -130,14 +142,16 @@ scrollbar_style = """
 
 section_lesson_container_style = """
     border-radius: 10px;
-    background-color: #e2d9d2;
+    /*background-color: #e2d9d2;*/
+    background-color: transparent;
 """
 
 
 scroll_content_style = """
     border: none;
     border-radius: 20px;
-    background-color: #e2d9d2;
+    /*background-color: #e2d9d2;*/
+    background-color: transparent;
 """
 
 

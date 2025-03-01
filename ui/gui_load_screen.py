@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import ( QVBoxLayout, QHBoxLayout, QLabel, QScrollArea, QPushButton,
-                              QWidget, QFrame, QMenu )
-from PyQt5.QtCore import Qt, QSize, QPoint
+                              QWidget, QFrame, QMenu, QMainWindow )
+from PyQt5.QtCore import Qt, QSize, QPoint, QEvent
 from PyQt5.QtGui import QIcon
 import pandas as pd
 import numpy as np
@@ -10,11 +10,11 @@ from user.credential import get_gender_for_user
 from ui.styles_app_screen import select_back_style, select_user_style, menu_style
 from ui.styles_load_screen import (scroll_content_style, section_button_style, section_lesson_container_style,
                                    lesson_button_style, scrollbar_style, quick_chat_button_style,
-                                   storyline_container_style, hide_lesson_button_style,
+                                   storyline_container_style, hide_lesson_button_style, storyline_label_style,
                                    update_section_buttons_styles, update_lesson_buttons_styles)
 from functools import partial
 
-class LoadScreen(QWidget):
+class LoadScreen(QMainWindow):
     def __init__(self, go_to_named_screen):
         super().__init__()
         self.go_to_named_screen = go_to_named_screen
@@ -103,7 +103,7 @@ class LoadScreen(QWidget):
         self.main_load_layout = QVBoxLayout()
         self.main_load_layout.addLayout(self.quick_start_layout)
         story_line_label = QLabel('Story Line')
-        story_line_label.setStyleSheet('font-size: 16px; font-weight:bold; color: black; padding-top: 20px; padding-left:10px;')
+        story_line_label.setStyleSheet(storyline_label_style)
         self.main_load_layout.addWidget(story_line_label)
         self.main_load_layout.addWidget(self.storyline_container)
         self.main_load_layout.setContentsMargins(10, 15, 10, 15)
@@ -112,8 +112,21 @@ class LoadScreen(QWidget):
         self.load_layout.addWidget(self.menu_container)
         self.load_layout.addLayout(self.main_load_layout)
 
-        self.setLayout(self.load_layout)
+        self.main_content_widget = QWidget()
+        self.main_content_widget.setLayout(self.load_layout)
+        self.background_label = QWidget(self.main_content_widget)
+        self.background_label.setStyleSheet("border-image: url('images/wallpapers/beige_3.jpeg') repeat;")
+        self.background_label.setGeometry(self.main_content_widget.rect())
+        self.background_label.lower()
+        self.main_content_widget.installEventFilter(self)
+        self.setCentralWidget(self.main_content_widget)
 
+        # self.setLayout(self.load_layout)
+
+    def eventFilter(self, obj, event):
+        if obj == self.main_content_widget and event.type() == QEvent.Resize:
+            self.background_label.setGeometry(self.main_content_widget.rect())
+        return super().eventFilter(obj, event)
 
     def add_section_and_lesson_bubbles(self):
         num_sections = self.story_df.loc[:, 'section'].unique().tolist()
