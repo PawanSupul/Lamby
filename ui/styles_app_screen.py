@@ -94,7 +94,11 @@ select_text_style = """
 
 
 menu_style = """
-    background-color: #8cb7a4; border-radius: 0px; border:none;
+    QWidget{
+        background-color: #8cb7a4; 
+        border-radius: 0px; 
+        border:none;
+    }
 """
 
 

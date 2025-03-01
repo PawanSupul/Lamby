@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import (QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QSizePolicy,
                              QScrollArea, QLineEdit, QButtonGroup, QMenu, QMainWindow)
 from PyQt5.QtGui import QFontMetrics, QFont, QIcon
-from PyQt5.QtCore import (Qt, QSize, QTimer, QThread, pyqtSignal, QPoint)
+from PyQt5.QtCore import (Qt, QSize, QTimer, QThread, pyqtSignal, QPoint, QEvent)
 
 from functools import partial
 import asyncio
@@ -14,7 +14,7 @@ from converter.speech_to_text import SpeachToText
 from converter.text_to_speech import TextToSpeech_Microsoft
 
 
-class AppScreen(QWidget):
+class AppScreen(QMainWindow):
     user_message_signal = pyqtSignal(str)
     reset_chat_signal = pyqtSignal()
 
@@ -173,7 +173,6 @@ class AppScreen(QWidget):
         self.send_text_button.setShortcut("Return")
         self.send_text_button.hide()
 
-
         self.input_button_set_layout = QHBoxLayout()
         self.input_button_set_layout.addWidget(self.send_button_en)
         self.input_button_set_layout.addWidget(self.send_button_es)
@@ -185,19 +184,25 @@ class AppScreen(QWidget):
         self.input_layout.addLayout(self.input_button_set_layout)
         self.input_container = QWidget()
         self.input_container.setLayout(self.input_layout)
-
+        self.input_container.setStyleSheet("background-color: transparent;")
 
         # Add widget to main layout
         self.main_layout.addWidget(self.menu_container)
         self.main_layout.addWidget(self.translated_result)
         self.main_layout.addWidget(self.scroll_area)
         self.main_layout.addWidget(self.input_container)
+
         self.main_content_widget = QWidget()
-        # self.main_content_widget.setLayout(self.main_layout)
-        # self.main_content_widget.setStyleSheet("background-image: url('images/wallpapers/beige_1.jpg'); background-position: center;")
-        # self.main_content_widget.setStyleSheet('background-color: red;')
-        self.setLayout(self.main_layout)
-        # self.setCentralWidget(self.main_content_widget)
+        self.main_content_widget.setLayout(self.main_layout)
+
+        self.background_label = QWidget(self.main_content_widget)
+        self.background_label.setStyleSheet("border-image: url('images/wallpapers/beige_3.jpeg') repeat;")
+        self.background_label.setGeometry(self.main_content_widget.rect())
+        self.background_label.lower()
+        self.main_content_widget.installEventFilter(self)
+
+
+        self.setCentralWidget(self.main_content_widget)
 
         # Button click events
         self.clear_button.clicked.connect(self.handle_clear)
@@ -214,6 +219,12 @@ class AppScreen(QWidget):
         self.reset_chat_signal.connect(self.conversation_engine.reset_conversation, Qt.QueuedConnection)
         self.conversation_engine.response_ready.connect(self.display_reply_from_system)
         self.conversation_engine.reset_success.connect(self.successful_reset)
+
+
+    def eventFilter(self, obj, event):
+        if obj == self.main_content_widget and event.type() == QEvent.Resize:
+            self.background_label.setGeometry(self.main_content_widget.rect())
+        return super().eventFilter(obj, event)
 
 
     def show_user_menu(self):
