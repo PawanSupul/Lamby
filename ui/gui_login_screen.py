@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import (QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QFrame, QLabel, QLineEdit,
                              QCheckBox, QPushButton, QSizePolicy)
 from PyQt6.QtGui import QIcon, QPixmap
-from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtCore import Qt, QSize, QTimer
 from user.credential import verify_user, get_all_registered_users, update_current_user, get_current_user, get_password_for_user
 from ui.styles_login_screen import *
 
@@ -15,8 +15,8 @@ class LoginScreen(QMainWindow):
 
 
     def make_login_screen(self):
-        central_widget = QWidget(self)
-        self.setCentralWidget(central_widget)
+        self.central_widget = QWidget(self)
+        self.setCentralWidget(self.central_widget)
         main_layout = QVBoxLayout()
         main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
@@ -28,7 +28,7 @@ class LoginScreen(QMainWindow):
         self.login_container.setStyleSheet(login_container_style)
 
         main_layout.addWidget(self.login_container)
-        central_widget.setLayout(main_layout)
+        self.central_widget.setLayout(main_layout)
 
         self.topic_label = QLabel("Sign-in to Lamby")
         self.topic_label.setStyleSheet("color: navy; font-size: 26px; padding: 0px; margin: 10px")
@@ -104,16 +104,33 @@ class LoginScreen(QMainWindow):
         self.login_layout.addLayout(self.signup_layout)
         self.login_layout.setSpacing(20)
 
-        # self.main_login_layout = QVBoxLayout()
-        # self.main_login_layout.addWidget(self.login_container, alignment=Qt.AlignmentFlag.AlignCenter)
-
-        # self.setLayout(self.main_login_layout)
-
         self.password_view.clicked.connect(self.toggle_view_password)
         self.login_button.clicked.connect(self.handle_login)
         self.forgot_password_button.clicked.connect(self.handle_forgot_password)
         self.sign_up_button.clicked.connect(self.handle_sign_up)
         self.username_input.editingFinished.connect(self.validate_username)
+
+        self.lamby_label = QLabel(self.central_widget)
+        self.lamby_pixmap = QPixmap('images/lamb/transparent/sing.png')
+        self.lamby_label.setPixmap(self.lamby_pixmap)
+        self.lamby_label.setScaledContents(True)
+        self.lamby_label.setFixedSize(100, 100)
+        self.lamby_label.lower()
+
+        QTimer.singleShot(0, self.update_lamby)
+
+
+    def update_lamby(self):
+        login_rect = self.login_container.geometry()
+        self.lamby_label.move(
+            login_rect.right() - int(login_rect.width()/5),
+            login_rect.top() - self.lamby_label.height() + 12
+        )
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.update_lamby()
+
 
 
     def handle_login(self):

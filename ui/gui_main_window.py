@@ -35,8 +35,10 @@ class MainWindow(QStackedWidget):
             self.login_screen.set_username(kwargs['username'])
             self.login_screen.initiation_protocol()
             self.setCurrentWidget(self.login_screen)
+            self.login_screen.update_lamby()
         elif(screen_name == 'signup'):
             self.setCurrentWidget(self.signup_screen)
+            self.signup_screen.update_lamby()
         elif(screen_name == 'load'):
             self.load_screen.set_username(kwargs['username'])
             self.load_screen.initiation_protocol()

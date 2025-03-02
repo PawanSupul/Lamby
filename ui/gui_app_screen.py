@@ -195,7 +195,7 @@ class AppScreen(QMainWindow):
         self.main_layout.addWidget(self.input_container)
 
         self.background_label = QWidget(self.main_content_widget)
-        self.background_label.setStyleSheet("border-image: url('images/wallpapers/beige_3.jpeg') repeat;")
+        self.background_label.setStyleSheet("border-image: url('images/wallpapers/pattern_1_hue.jpg') repeat;")
         self.background_label.setGeometry(self.main_content_widget.rect())
         self.background_label.lower()
         self.main_content_widget.installEventFilter(self)

@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import (QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QFrame, QLabel, QLineEdit,
                              QPushButton, QRadioButton, QButtonGroup, QSizePolicy)
-from PyQt6.QtGui import QIcon
-from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtGui import QIcon, QPixmap
+from PyQt6.QtCore import Qt, QSize, QTimer
 from ui.styles_login_screen import *
 from user.credential import save_credentials_when_signup, get_all_registered_users, get_current_user
 
@@ -19,20 +19,20 @@ class SignUpScreen(QMainWindow):
         self.make_signup_page()
 
     def make_signup_page(self):
-        central_widget = QWidget(self)
-        self.setCentralWidget(central_widget)
+        self.central_widget = QWidget(self)
+        self.setCentralWidget(self.central_widget)
         main_layout = QVBoxLayout()
         main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.signup_layout = QVBoxLayout()
 
-        self.signup_container = QFrame(central_widget)
+        self.signup_container = QFrame(self.central_widget)
         self.signup_container.setLayout(self.signup_layout)
         self.signup_container.setFixedSize(550, 650)
         self.signup_container.setStyleSheet(login_container_style)
 
         main_layout.addWidget(self.signup_container)
-        central_widget.setLayout(main_layout)
+        self.central_widget.setLayout(main_layout)
 
         # Title
         topic = QLabel("Sign-up for Lamby")
@@ -187,6 +187,27 @@ class SignUpScreen(QMainWindow):
         self.username_entry.editingFinished.connect(self.validate_username)
         self.signup_button.clicked.connect(self.handle_signup)
         self.cancel_button.clicked.connect(self.handle_cancel)
+
+        self.lamby_label = QLabel(self.central_widget)
+        self.lamby_pixmap = QPixmap('images/lamb/transparent/chair.png')
+        self.lamby_label.setPixmap(self.lamby_pixmap)
+        self.lamby_label.setScaledContents(True)
+        self.lamby_label.setFixedSize(100, 100)
+        self.lamby_label.lower()
+
+        QTimer.singleShot(0, self.update_lamby)
+
+    def update_lamby(self):
+        signup_rect = self.signup_container.geometry()
+        self.lamby_label.move(
+            signup_rect.right(),
+            signup_rect.bottom() - self.lamby_label.height()
+        )
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.update_lamby()
+
 
 
     def toggle_view_password_1(self):
