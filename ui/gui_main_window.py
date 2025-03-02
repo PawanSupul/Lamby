@@ -43,6 +43,7 @@ class MainWindow(QStackedWidget):
             self.load_screen.set_username(kwargs['username'])
             self.load_screen.initiation_protocol()
             self.setCurrentWidget(self.load_screen)
+            self.load_screen.update_lamby()
         elif(screen_name == 'app'):
             self.app_screen.set_information(kwargs['username'], lesson_num=kwargs['lesson_num'], lesson_description=kwargs['lesson'], mode=kwargs['mode'])
             self.setCurrentWidget(self.app_screen)
