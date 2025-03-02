@@ -227,7 +227,7 @@ class AppScreen(QMainWindow):
 
 
     def show_user_menu(self):
-        self.user_menu.exec_(self.select_user.mapToGlobal(QPoint(-60, self.select_user.height() + 5)))
+        self.user_menu.exec(self.select_user.mapToGlobal(QPoint(-60, self.select_user.height() + 5)))
 
 
     def send_message(self):
@@ -322,7 +322,7 @@ class AppScreen(QMainWindow):
             message_layout.addWidget(translate_button)
             message_layout.addStretch(1)
 
-        message_container = QWidget()
+        message_container = QWidget(self.scroll_content)
         message_container.setLayout(message_layout)
         self.scroll_layout.addWidget(message_container)
         # noinspection PyTypeChecker

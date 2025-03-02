@@ -272,7 +272,7 @@ class LoadScreen(QMainWindow):
 
 
     def show_user_menu(self):
-        self.user_menu.exec_(self.select_user.mapToGlobal(QPoint(-60, self.select_user.height() + 5)))
+        self.user_menu.exec(self.select_user.mapToGlobal(QPoint(-60, self.select_user.height() + 5)))
 
 
     def handle_go_back(self):
