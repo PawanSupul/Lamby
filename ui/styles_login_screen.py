@@ -91,6 +91,7 @@ signup_label_style = '''
     padding: 0px;
     color: black;
     font-size: 14px;
+    font-weight: bold;
 '''
 
 
