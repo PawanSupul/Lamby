@@ -10,6 +10,7 @@ class LoginScreen(QMainWindow):
     def __init__(self, go_to_named_screen):
         super().__init__(None)
         self.go_to_named_screen = go_to_named_screen
+        self.label_width = 130
         self.make_login_screen()
         self.initiation_protocol()
 
@@ -38,6 +39,7 @@ class LoginScreen(QMainWindow):
         self.username_layout = QHBoxLayout()
         self.username_label = QLabel("Username: ")
         self.username_label.setStyleSheet(label_style)
+        self.username_label.setFixedWidth(self.label_width)
         self.username_input = QLineEdit()
         self.username_input.setStyleSheet(input_style)
         self.username_layout.addWidget(self.username_label)
@@ -50,6 +52,7 @@ class LoginScreen(QMainWindow):
         self.password_layout = QHBoxLayout()
         self.password_label = QLabel("Password: ")
         self.password_label.setStyleSheet(label_style)
+        self.password_label.setFixedWidth(self.label_width)
         self.password_input = QLineEdit()
         self.password_input.setEchoMode(QLineEdit.EchoMode.Password)     # Hide password
         self.password_input.setStyleSheet(input_style)
