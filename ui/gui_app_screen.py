@@ -1,8 +1,7 @@
-from PyQt6.QtWidgets import (QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QSizePolicy,
-                             QScrollArea, QLineEdit, QButtonGroup, QMenu, QMainWindow)
+from PyQt6.QtWidgets import (QMainWindow, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QSizePolicy,
+                             QScrollArea, QLineEdit, QButtonGroup, QMenu)
 from PyQt6.QtGui import QFontMetrics, QFont, QIcon
 from PyQt6.QtCore import (Qt, QSize, QTimer, QThread, pyqtSignal, QPoint, QEvent)
-
 from functools import partial
 import asyncio
 from googletrans import Translator

@@ -1,11 +1,12 @@
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QFrame, QLabel, QLineEdit, QCheckBox, QPushButton, QSizePolicy
-from PyQt6.QtGui import QIcon
+from PyQt6.QtWidgets import (QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QFrame, QLabel, QLineEdit,
+                             QCheckBox, QPushButton, QSizePolicy)
+from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtCore import Qt, QSize
 from user.credential import verify_user, get_all_registered_users, update_current_user, get_current_user, get_password_for_user
 from ui.styles_login_screen import *
 
 
-class LoginScreen(QWidget):
+class LoginScreen(QMainWindow):
     def __init__(self, go_to_named_screen):
         super().__init__(None)
         self.go_to_named_screen = go_to_named_screen
@@ -14,12 +15,20 @@ class LoginScreen(QWidget):
 
 
     def make_login_screen(self):
+        central_widget = QWidget(self)
+        self.setCentralWidget(central_widget)
+        main_layout = QVBoxLayout()
+        main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
         self.login_layout = QVBoxLayout()
 
         self.login_container = QFrame(self)
         self.login_container.setLayout(self.login_layout)
         self.login_container.setFixedSize(550, 490)
         self.login_container.setStyleSheet(login_container_style)
+
+        main_layout.addWidget(self.login_container)
+        central_widget.setLayout(main_layout)
 
         self.topic_label = QLabel("Sign-in to Lamby")
         self.topic_label.setStyleSheet("color: navy; font-size: 26px; padding: 0px; margin: 10px")
@@ -95,10 +104,10 @@ class LoginScreen(QWidget):
         self.login_layout.addLayout(self.signup_layout)
         self.login_layout.setSpacing(20)
 
-        self.main_login_layout = QVBoxLayout()
-        self.main_login_layout.addWidget(self.login_container, alignment=Qt.AlignmentFlag.AlignCenter)
+        # self.main_login_layout = QVBoxLayout()
+        # self.main_login_layout.addWidget(self.login_container, alignment=Qt.AlignmentFlag.AlignCenter)
 
-        self.setLayout(self.main_login_layout)
+        # self.setLayout(self.main_login_layout)
 
         self.password_view.clicked.connect(self.toggle_view_password)
         self.login_button.clicked.connect(self.handle_login)
