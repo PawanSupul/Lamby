@@ -6,6 +6,7 @@ label_style = '''
     border: none;
     font-weight: bold;
     font-size: 14px;
+    padding: 0px;
 '''
 
 

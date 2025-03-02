@@ -28,7 +28,7 @@ class SignUpScreen(QMainWindow):
 
         self.signup_container = QFrame(self.central_widget)
         self.signup_container.setLayout(self.signup_layout)
-        self.signup_container.setFixedSize(550, 650)
+        self.signup_container.setFixedSize(510, 650)
         self.signup_container.setStyleSheet(login_container_style)
 
         main_layout.addWidget(self.signup_container)

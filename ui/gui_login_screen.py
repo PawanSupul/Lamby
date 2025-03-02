@@ -10,7 +10,7 @@ class LoginScreen(QMainWindow):
     def __init__(self, go_to_named_screen):
         super().__init__(None)
         self.go_to_named_screen = go_to_named_screen
-        self.label_width = 130
+        self.label_width = 115
         self.make_login_screen()
         self.initiation_protocol()
 
@@ -25,7 +25,7 @@ class LoginScreen(QMainWindow):
 
         self.login_container = QFrame(self)
         self.login_container.setLayout(self.login_layout)
-        self.login_container.setFixedSize(550, 490)
+        self.login_container.setFixedSize(510, 490)
         self.login_container.setStyleSheet(login_container_style)
 
         main_layout.addWidget(self.login_container)
