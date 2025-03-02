@@ -6,6 +6,7 @@ label_style = '''
     border: none;
     font-weight: bold;
     font-size: 14px;
+    padding: 0px;
 '''
 
 
@@ -91,6 +92,7 @@ signup_label_style = '''
     padding: 0px;
     color: black;
     font-size: 14px;
+    font-weight: bold;
 '''
 
 

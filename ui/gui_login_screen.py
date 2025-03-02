@@ -1,25 +1,35 @@
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QFrame, QLabel, QLineEdit, QCheckBox, QPushButton, QSizePolicy
-from PyQt6.QtGui import QIcon
-from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtWidgets import (QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QFrame, QLabel, QLineEdit,
+                             QCheckBox, QPushButton, QSizePolicy)
+from PyQt6.QtGui import QIcon, QPixmap
+from PyQt6.QtCore import Qt, QSize, QTimer
 from user.credential import verify_user, get_all_registered_users, update_current_user, get_current_user, get_password_for_user
 from ui.styles_login_screen import *
 
 
-class LoginScreen(QWidget):
+class LoginScreen(QMainWindow):
     def __init__(self, go_to_named_screen):
         super().__init__(None)
         self.go_to_named_screen = go_to_named_screen
+        self.label_width = 115
         self.make_login_screen()
         self.initiation_protocol()
 
 
     def make_login_screen(self):
+        self.central_widget = QWidget(self)
+        self.setCentralWidget(self.central_widget)
+        main_layout = QVBoxLayout()
+        main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
         self.login_layout = QVBoxLayout()
 
         self.login_container = QFrame(self)
         self.login_container.setLayout(self.login_layout)
-        self.login_container.setFixedSize(550, 490)
+        self.login_container.setFixedSize(510, 490)
         self.login_container.setStyleSheet(login_container_style)
+
+        main_layout.addWidget(self.login_container)
+        self.central_widget.setLayout(main_layout)
 
         self.topic_label = QLabel("Sign-in to Lamby")
         self.topic_label.setStyleSheet("color: navy; font-size: 26px; padding: 0px; margin: 10px")
@@ -29,6 +39,7 @@ class LoginScreen(QWidget):
         self.username_layout = QHBoxLayout()
         self.username_label = QLabel("Username: ")
         self.username_label.setStyleSheet(label_style)
+        self.username_label.setFixedWidth(self.label_width)
         self.username_input = QLineEdit()
         self.username_input.setStyleSheet(input_style)
         self.username_layout.addWidget(self.username_label)
@@ -41,6 +52,7 @@ class LoginScreen(QWidget):
         self.password_layout = QHBoxLayout()
         self.password_label = QLabel("Password: ")
         self.password_label.setStyleSheet(label_style)
+        self.password_label.setFixedWidth(self.label_width)
         self.password_input = QLineEdit()
         self.password_input.setEchoMode(QLineEdit.EchoMode.Password)     # Hide password
         self.password_input.setStyleSheet(input_style)
@@ -95,16 +107,33 @@ class LoginScreen(QWidget):
         self.login_layout.addLayout(self.signup_layout)
         self.login_layout.setSpacing(20)
 
-        self.main_login_layout = QVBoxLayout()
-        self.main_login_layout.addWidget(self.login_container, alignment=Qt.AlignmentFlag.AlignCenter)
-
-        self.setLayout(self.main_login_layout)
-
         self.password_view.clicked.connect(self.toggle_view_password)
         self.login_button.clicked.connect(self.handle_login)
         self.forgot_password_button.clicked.connect(self.handle_forgot_password)
         self.sign_up_button.clicked.connect(self.handle_sign_up)
         self.username_input.editingFinished.connect(self.validate_username)
+
+        self.lamby_label = QLabel(self.central_widget)
+        self.lamby_pixmap = QPixmap('images/lamb/transparent/sing.png')
+        self.lamby_label.setPixmap(self.lamby_pixmap)
+        self.lamby_label.setScaledContents(True)
+        self.lamby_label.setFixedSize(100, 100)
+        self.lamby_label.lower()
+
+        QTimer.singleShot(0, self.update_lamby)
+
+
+    def update_lamby(self):
+        login_rect = self.login_container.geometry()
+        self.lamby_label.move(
+            login_rect.right() - int(login_rect.width()/5),
+            login_rect.top() - self.lamby_label.height() + 12
+        )
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.update_lamby()
+
 
 
     def handle_login(self):

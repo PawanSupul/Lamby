@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import ( QVBoxLayout, QHBoxLayout, QLabel, QScrollArea, QPushButton, QWidget,
                               QFrame, QMenu, QMainWindow )
-from PyQt6.QtCore import Qt, QSize, QPoint, QEvent
-from PyQt6.QtGui import QIcon
+from PyQt6.QtCore import Qt, QSize, QPoint, QEvent, QTimer
+from PyQt6.QtGui import QIcon, QPixmap
 import pandas as pd
 import numpy as np
 import random
@@ -37,7 +37,7 @@ class LoadScreen(QMainWindow):
         self.main_content_widget = QWidget(self)
         self.main_content_widget.setLayout(self.load_layout)
         self.background_label = QWidget(self.main_content_widget)
-        self.background_label.setStyleSheet("border-image: url('images/wallpapers/beige_3.jpeg') repeat;")
+        self.background_label.setStyleSheet("border-image: url('images/wallpapers/pattern_1_hue.jpg') repeat;")
         self.background_label.setGeometry(self.main_content_widget.rect())
         self.background_label.lower()
         self.main_content_widget.installEventFilter(self)
@@ -119,6 +119,26 @@ class LoadScreen(QMainWindow):
         self.load_layout.addLayout(self.main_load_layout)
 
         self.setCentralWidget(self.main_content_widget)
+
+        self.lamby_label = QLabel(self.background_label)
+        self.lamby_pixmap = QPixmap('images/lamb/transparent/sleep.png')
+        self.lamby_label.setPixmap(self.lamby_pixmap)
+        self.lamby_label.setScaledContents(True)
+        self.lamby_label.setFixedSize(100, 100)
+        self.lamby_label.lower()
+
+        QTimer.singleShot(0, self.update_lamby)
+
+    def update_lamby(self):
+        signup_rect = self.storyline_container.geometry()
+        self.lamby_label.move(
+            signup_rect.left() + int(self.lamby_label.width() * 1.5) ,
+            signup_rect.top() - self.lamby_label.height() + 27
+        )
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.update_lamby()
 
 
     def eventFilter(self, obj, event):

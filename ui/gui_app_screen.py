@@ -1,8 +1,7 @@
-from PyQt6.QtWidgets import (QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QSizePolicy,
-                             QScrollArea, QLineEdit, QButtonGroup, QMenu, QMainWindow)
+from PyQt6.QtWidgets import (QMainWindow, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QSizePolicy,
+                             QScrollArea, QLineEdit, QButtonGroup, QMenu)
 from PyQt6.QtGui import QFontMetrics, QFont, QIcon
 from PyQt6.QtCore import (Qt, QSize, QTimer, QThread, pyqtSignal, QPoint, QEvent)
-
 from functools import partial
 import asyncio
 from googletrans import Translator
@@ -196,7 +195,7 @@ class AppScreen(QMainWindow):
         self.main_layout.addWidget(self.input_container)
 
         self.background_label = QWidget(self.main_content_widget)
-        self.background_label.setStyleSheet("border-image: url('images/wallpapers/beige_3.jpeg') repeat;")
+        self.background_label.setStyleSheet("border-image: url('images/wallpapers/pattern_1_hue.jpg') repeat;")
         self.background_label.setGeometry(self.main_content_widget.rect())
         self.background_label.lower()
         self.main_content_widget.installEventFilter(self)

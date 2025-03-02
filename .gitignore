@@ -24,6 +24,7 @@ share/python-wheels/
 *.egg
 MANIFEST
 secrets/
+images/wallpapers/*.psd
 
 # Unit test / coverage reports
 htmlcov/
