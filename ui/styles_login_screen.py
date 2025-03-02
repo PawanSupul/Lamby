@@ -80,6 +80,7 @@ error_label_style = '''
     color: red;
     border: none;
     margin: 0px;
+    padding: 0px;
     font-size: 14px;
     background-color: #8cb7a4;
 '''
