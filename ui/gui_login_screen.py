@@ -199,7 +199,7 @@ class LoginScreen(QMainWindow):
 
 
     def handle_forgot_password(self):
-        self.go_to_named_screen('signup')
+        self.go_to_named_screen('forgot')
 
 
     def handle_sign_up(self):
