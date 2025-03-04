@@ -23,14 +23,14 @@ class ForgotScreen(QMainWindow):
         main_layout = QVBoxLayout()
         main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.signup_layout = QVBoxLayout()
+        self.forgot_layout = QVBoxLayout()
 
-        self.signup_container = QFrame(self.central_widget)
-        self.signup_container.setLayout(self.signup_layout)
-        self.signup_container.setFixedSize(510, 650)
-        self.signup_container.setStyleSheet(login_container_style)
+        self.forgot_container = QFrame(self.central_widget)
+        self.forgot_container.setLayout(self.forgot_layout)
+        self.forgot_container.setFixedSize(510, 600)
+        self.forgot_container.setStyleSheet(login_container_style)
 
-        main_layout.addWidget(self.signup_container)
+        main_layout.addWidget(self.forgot_container)
         self.central_widget.setLayout(main_layout)
 
         # Title
@@ -40,49 +40,38 @@ class ForgotScreen(QMainWindow):
         topic.setStyleSheet("color: navy; font-size: 26px;")
 
         # create frame for details
-        self.details_frame = QFrame(self.signup_container)
+        self.details_frame = QFrame(self.forgot_container)
         self.details_frame.setStyleSheet(signup_details_frame_style)
 
-        # name field
+        # OTP field
         self.name_layout = QHBoxLayout()
-        name_label = QLabel("Your Name: ")
-        name_label.setFixedWidth(self.label_width)
-        name_label.setStyleSheet(signup_label_style)
-        self.name_entry = QLineEdit()
-        self.name_entry.setStyleSheet(signup_entry_style)
+        name_label = QLabel("We have sent an OTP to your registered email address. Please enter the OTP to continue.")
+        name_label.setWordWrap(True)
+        name_label.setStyleSheet("border: none; padding: 0px; color: navy; font-size: 14px;")
+        name_label.setFixedHeight(40)
+        resend_otp_layout = QHBoxLayout()
+        self.resend_otp_button = QPushButton("Resend")
+        self.resend_otp_button.setFixedWidth(70)
+        self.resend_otp_button.setStyleSheet(resend_otp_button_style)
+        self.resend_timer = QLabel("30 s")
+        self.resend_timer.setFixedSize(30, 40)
+        self.resend_timer.setStyleSheet("font-size: 14px; border: none; margin: 0px; padding: 0px;")
+        self.resend_timer.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        resend_otp_layout.addWidget(self.resend_otp_button)
+        resend_otp_layout.addWidget(self.resend_timer)
+
         self.name_layout.addWidget(name_label)
-        self.name_layout.addWidget(self.name_entry)
+        self.name_layout.addLayout(resend_otp_layout)
 
         # age field
-        self.age_layout = QHBoxLayout()
-        age_label = QLabel("Your Age: ")
-        age_label.setFixedWidth(self.label_width)
-        age_label.setStyleSheet(signup_label_style)
-        self.age_entry = QLineEdit()
-        self.age_entry.setStyleSheet(signup_entry_style)
-        self.age_layout.addWidget(age_label)
-        self.age_layout.addWidget(self.age_entry)
-
-        # gender field
-        self.gender_layout = QHBoxLayout()
-        gender_label = QLabel("Gender: ")
-        gender_label.setFixedWidth(self.label_width)
-        gender_label.setStyleSheet(signup_label_style)
-        self.radio_male = QRadioButton("Male")
-        self.radio_male.setStyleSheet(signup_radio_button_style)
-        self.radio_female = QRadioButton("Female")
-        self.radio_female.setStyleSheet(signup_radio_button_style)
-        self.radio_other = QRadioButton("Other")
-        self.radio_other.setStyleSheet(signup_radio_button_style)
-        self.gender_button_group = QButtonGroup(self.details_frame)
-        self.gender_button_group.addButton(self.radio_male)
-        self.gender_button_group.addButton(self.radio_female)
-        self.gender_button_group.addButton(self.radio_other)
-        self.gender_button_group.setExclusive(True)
-        self.gender_layout.addWidget(gender_label)
-        self.gender_layout.addWidget(self.radio_male)
-        self.gender_layout.addWidget(self.radio_female)
-        self.gender_layout.addWidget(self.radio_other)
+        self.otp_layout = QHBoxLayout()
+        otp_label = QLabel("OTP: ")
+        otp_label.setFixedWidth(self.label_width)
+        otp_label.setStyleSheet(signup_label_style)
+        self.otp_entry = QLineEdit()
+        self.otp_entry.setStyleSheet(signup_entry_style)
+        self.otp_layout.addWidget(otp_label)
+        self.otp_layout.addWidget(self.otp_entry)
 
         # username field
         self.username_layout = QHBoxLayout()
@@ -96,7 +85,7 @@ class ForgotScreen(QMainWindow):
 
         # password 1 layout
         self.password_1_layout = QHBoxLayout()
-        password_1_label = QLabel("Enter Password: ")
+        password_1_label = QLabel("New Password: ")
         password_1_label.setFixedWidth(self.label_width)
         password_1_label.setStyleSheet(signup_label_style)
         self.password_1_entry = QLineEdit()
@@ -130,20 +119,20 @@ class ForgotScreen(QMainWindow):
 
         # button field
         self.button_layout = QHBoxLayout()
-        self.signup_button = QPushButton('Sign Up')
+        self.signup_button = QPushButton('Update')
         self.signup_button.setStyleSheet(signup_button_style)
         self.cancel_button = QPushButton('Cancel')
         self.cancel_button.setStyleSheet(signup_button_style)
-        self.button_layout.addWidget(self.signup_button)
         self.button_layout.addWidget(self.cancel_button)
+        self.button_layout.addWidget(self.signup_button)
 
         # Error messages
-        self.error_age_label = QLabel('You must be 18 years or older to sign up!')
-        self.error_age_label.setStyleSheet(error_label_style)
-        self.error_age_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.error_age_label.setFixedHeight(40)
-        self.error_age_label.hide()
-        self.error_username_label = QLabel('Username already exists. Use a different username!')
+        self.error_otp_label = QLabel('OTP is incorrect or expired!')
+        self.error_otp_label.setStyleSheet(error_label_style)
+        self.error_otp_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.error_otp_label.setFixedHeight(40)
+        self.error_otp_label.hide()
+        self.error_username_label = QLabel('Username is incorrect!')
         self.error_username_label.setStyleSheet(error_label_style)
         self.error_username_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.error_username_label.setFixedHeight(40)
@@ -161,9 +150,8 @@ class ForgotScreen(QMainWindow):
 
         self.username_password_layout = QVBoxLayout()
         self.username_password_layout.addLayout(self.name_layout)
-        self.username_password_layout.addLayout(self.age_layout)
-        self.username_password_layout.addWidget(self.error_age_label)
-        self.username_password_layout.addLayout(self.gender_layout)
+        self.username_password_layout.addLayout(self.otp_layout)
+        self.username_password_layout.addWidget(self.error_otp_label)
         self.username_password_layout.addLayout(self.username_layout)
         self.username_password_layout.addWidget(self.error_username_label)
         self.username_password_layout.addLayout(self.password_1_layout)
@@ -173,16 +161,16 @@ class ForgotScreen(QMainWindow):
         self.details_frame.setLayout(self.username_password_layout)
         self.details_frame.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
-        self.signup_layout.addWidget(topic, alignment=Qt.AlignmentFlag.AlignHCenter)
-        self.signup_layout.addWidget(self.details_frame)
-        self.signup_layout.addLayout(self.button_layout)
-        self.signup_layout.addWidget(self.error_form_label)
-        self.signup_layout.setSpacing(20)
+        self.forgot_layout.addWidget(topic, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.forgot_layout.addWidget(self.details_frame)
+        self.forgot_layout.addLayout(self.button_layout)
+        self.forgot_layout.addWidget(self.error_form_label)
+        self.forgot_layout.setSpacing(20)
 
         self.password_1_view.clicked.connect(self.toggle_view_password_1)
         self.password_2_view.clicked.connect(self.toggle_view_password_2)
         self.password_2_entry.textChanged.connect(self.validate_password)
-        self.age_entry.editingFinished.connect(self.validate_age)
+        self.otp_entry.editingFinished.connect(self.validate_age)
         self.username_entry.editingFinished.connect(self.validate_username)
         self.signup_button.clicked.connect(self.handle_signup)
         self.cancel_button.clicked.connect(self.handle_cancel)
@@ -197,7 +185,7 @@ class ForgotScreen(QMainWindow):
         QTimer.singleShot(0, self.update_lamby)
 
     def update_lamby(self):
-        signup_rect = self.signup_container.geometry()
+        signup_rect = self.forgot_container.geometry()
         self.lamby_label.move(
             signup_rect.right(),
             signup_rect.bottom() - self.lamby_label.height()
@@ -238,24 +226,24 @@ class ForgotScreen(QMainWindow):
 
 
     def validate_age(self):
-        age_text = self.age_entry.text()
+        age_text = self.otp_entry.text()
         if( age_text.isdigit() ):
             age = int(age_text)
             if( 18 <= age <= 100):
-                self.error_age_label.hide()
+                self.error_otp_label.hide()
                 self.error_form_label.hide()
                 self.age_validated = True
             elif(age < 18):
-                self.error_age_label.setText('You must be 18 years or older to sign up!')
-                self.error_age_label.show()
+                self.error_otp_label.setText('You must be 18 years or older to sign up!')
+                self.error_otp_label.show()
                 self.age_validated = False
             else:
-                self.error_age_label.setText('Enter a valid age!')
-                self.error_age_label.show()
+                self.error_otp_label.setText('Enter a valid age!')
+                self.error_otp_label.show()
                 self.age_validated = False
         else:
-            self.error_age_label.setText('Enter a valid age as a number!')
-            self.error_age_label.show()
+            self.error_otp_label.setText('Enter a valid age as a number!')
+            self.error_otp_label.show()
             self.age_validated = False
 
 
@@ -298,7 +286,7 @@ class ForgotScreen(QMainWindow):
     def handle_signup(self):
         if (self.age_validated and self.password_validated and self.username_validate):
             name = self.name_entry.text()
-            age = self.age_entry.text()
+            age = self.otp_entry.text()
             gender = self.get_gender()
             username = self.username_entry.text()
             password = self.password_1_entry.text()
@@ -334,14 +322,14 @@ class ForgotScreen(QMainWindow):
 
     def clear_form(self):
         self.name_entry.setText('')
-        self.age_entry.setText('')
+        self.otp_entry.setText('')
         for gb in self.gender_button_group.buttons():
             if gb.isChecked():
                 gb.setChecked(False)
         self.username_entry.setText('')
         self.password_1_entry.setText('')
         self.password_2_entry.setText('')
-        self.error_age_label.hide()
+        self.error_otp_label.hide()
         self.error_username_label.hide()
         self.error_password_label.hide()
         self.error_form_label.hide()

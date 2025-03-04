@@ -161,3 +161,22 @@ signup_details_frame_style = """
         margin: 0px;
     }
 """
+
+resend_otp_button_style = '''
+    QPushButton {
+        background-color: #5E81AC;
+        border: none;
+        border-radius: 10px;
+        padding: 8px;
+        height: 20px;
+        font-size: 14px;
+    }
+
+    QPushButton:hover {
+        background-color: #81A1C1;
+    }
+
+    QPushButton:pressed {
+        background-color: #88C0D0;
+    }
+'''
