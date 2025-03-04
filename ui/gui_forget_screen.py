@@ -49,7 +49,6 @@ class ForgotScreen(QMainWindow):
         name_label.setWordWrap(True)
         name_label.setStyleSheet("border: none; padding: 0px; color: navy; font-size: 14px;")
         name_label.setFixedHeight(40)
-        resend_otp_layout = QHBoxLayout()
         self.resend_otp_button = QPushButton("Resend")
         self.resend_otp_button.setFixedWidth(70)
         self.resend_otp_button.setStyleSheet(resend_otp_button_style)
@@ -57,11 +56,10 @@ class ForgotScreen(QMainWindow):
         self.resend_timer.setFixedSize(30, 40)
         self.resend_timer.setStyleSheet("font-size: 14px; border: none; margin: 0px; padding: 0px;")
         self.resend_timer.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        resend_otp_layout.addWidget(self.resend_otp_button)
-        resend_otp_layout.addWidget(self.resend_timer)
-
+        # self.resend_timer.hide()
         self.name_layout.addWidget(name_label)
-        self.name_layout.addLayout(resend_otp_layout)
+        self.name_layout.addWidget(self.resend_otp_button)
+        self.name_layout.addWidget(self.resend_timer)
 
         # age field
         self.otp_layout = QHBoxLayout()
@@ -170,9 +168,9 @@ class ForgotScreen(QMainWindow):
         self.password_1_view.clicked.connect(self.toggle_view_password_1)
         self.password_2_view.clicked.connect(self.toggle_view_password_2)
         self.password_2_entry.textChanged.connect(self.validate_password)
-        self.otp_entry.editingFinished.connect(self.validate_age)
+        self.otp_entry.editingFinished.connect(self.validate_otp)
         self.username_entry.editingFinished.connect(self.validate_username)
-        self.signup_button.clicked.connect(self.handle_signup)
+        self.signup_button.clicked.connect(self.handle_update)
         self.cancel_button.clicked.connect(self.handle_cancel)
 
         self.lamby_label = QLabel(self.central_widget)
@@ -184,6 +182,7 @@ class ForgotScreen(QMainWindow):
 
         QTimer.singleShot(0, self.update_lamby)
 
+
     def update_lamby(self):
         signup_rect = self.forgot_container.geometry()
         self.lamby_label.move(
@@ -191,10 +190,10 @@ class ForgotScreen(QMainWindow):
             signup_rect.bottom() - self.lamby_label.height()
         )
 
+
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self.update_lamby()
-
 
 
     def toggle_view_password_1(self):
@@ -219,32 +218,28 @@ class ForgotScreen(QMainWindow):
             self.password_2_view.setIcon(QIcon('images/unhide.png'))
 
 
-    def validate_name(self):
-        name = self.name_entry.text()
-        if(len(name) > 2):
-            self.error_form_label.hide()
+    # def validate_name(self):
+    #     name = self.name_entry.text()
+    #     if(len(name) > 2):
+    #         self.error_form_label.hide()
 
 
-    def validate_age(self):
-        age_text = self.otp_entry.text()
-        if( age_text.isdigit() ):
-            age = int(age_text)
-            if( 18 <= age <= 100):
+    def validate_otp(self):
+        otp_text = self.otp_entry.text()
+        if( otp_text.isdigit() ):
+            otp = int(otp_text)
+            if( 100000 <= otp <= 999999):
                 self.error_otp_label.hide()
                 self.error_form_label.hide()
-                self.age_validated = True
-            elif(age < 18):
-                self.error_otp_label.setText('You must be 18 years or older to sign up!')
-                self.error_otp_label.show()
-                self.age_validated = False
+                self.otp_validated = True
             else:
-                self.error_otp_label.setText('Enter a valid age!')
+                self.error_otp_label.setText('Enter a valid OTP!')
                 self.error_otp_label.show()
-                self.age_validated = False
+                self.otp_validated = False
         else:
-            self.error_otp_label.setText('Enter a valid age as a number!')
+            self.error_otp_label.setText('Enter a valid OTP!')
             self.error_otp_label.show()
-            self.age_validated = False
+            self.otp_validated = False
 
 
     def validate_username(self):
@@ -271,20 +266,20 @@ class ForgotScreen(QMainWindow):
             self.password_validated = False
 
 
-    def get_gender(self):
-        if self.radio_male.isChecked():
-            gender = 'Male'
-        elif self.radio_female.isChecked():
-            gender = 'Female'
-        elif self.radio_other.isChecked():
-            gender = 'Other'
-        else:
-            gender = 'Other'
-        return gender
+    # def get_gender(self):
+    #     if self.radio_male.isChecked():
+    #         gender = 'Male'
+    #     elif self.radio_female.isChecked():
+    #         gender = 'Female'
+    #     elif self.radio_other.isChecked():
+    #         gender = 'Other'
+    #     else:
+    #         gender = 'Other'
+    #     return gender
 
 
-    def handle_signup(self):
-        if (self.age_validated and self.password_validated and self.username_validate):
+    def handle_update(self):
+        if (self.otp_validated and self.password_validated and self.username_validate):
             name = self.name_entry.text()
             age = self.otp_entry.text()
             gender = self.get_gender()
@@ -321,11 +316,7 @@ class ForgotScreen(QMainWindow):
 
 
     def clear_form(self):
-        self.name_entry.setText('')
         self.otp_entry.setText('')
-        for gb in self.gender_button_group.buttons():
-            if gb.isChecked():
-                gb.setChecked(False)
         self.username_entry.setText('')
         self.password_1_entry.setText('')
         self.password_2_entry.setText('')
