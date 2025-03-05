@@ -43,6 +43,7 @@ class MainWindow(QStackedWidget):
             self.setCurrentWidget(self.signup_screen)
             self.signup_screen.update_lamby()
         elif(screen_name == 'forgot'):
+            self.forgot_screen.create_and_send_otp()
             self.setCurrentWidget(self.forgot_screen)
             self.forgot_screen.update_lamby()
         elif(screen_name == 'load'):

@@ -1,9 +1,9 @@
 from PyQt6.QtWidgets import (QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QFrame, QLabel, QLineEdit,
-                             QPushButton, QRadioButton, QButtonGroup, QSizePolicy)
+                             QPushButton, QSizePolicy)
 from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtCore import Qt, QSize, QTimer
 from ui.styles_login_screen import *
-from user.credential import save_credentials_when_signup, get_all_registered_users, get_current_user
+from user.credential import get_all_registered_users, get_current_user, update_password_for_user
 
 
 class ForgotScreen(QMainWindow):
@@ -13,9 +13,11 @@ class ForgotScreen(QMainWindow):
         self.label_width = 130
         self.pw_1_show = False
         self.pw_2_show = False
+        self.otp_validated = False
         self.password_validated = False
         self.username_validate = False
         self.make_forgot_page()
+
 
     def make_forgot_page(self):
         self.central_widget = QWidget(self)
@@ -24,7 +26,6 @@ class ForgotScreen(QMainWindow):
         main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.forgot_layout = QVBoxLayout()
-
         self.forgot_container = QFrame(self.central_widget)
         self.forgot_container.setLayout(self.forgot_layout)
         self.forgot_container.setFixedSize(510, 600)
@@ -130,7 +131,7 @@ class ForgotScreen(QMainWindow):
         self.error_otp_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.error_otp_label.setFixedHeight(40)
         self.error_otp_label.hide()
-        self.error_username_label = QLabel('Username is incorrect!')
+        self.error_username_label = QLabel('Username is not registered!')
         self.error_username_label.setStyleSheet(error_label_style)
         self.error_username_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.error_username_label.setFixedHeight(40)
@@ -165,11 +166,11 @@ class ForgotScreen(QMainWindow):
         self.forgot_layout.addWidget(self.error_form_label)
         self.forgot_layout.setSpacing(20)
 
+        self.otp_entry.editingFinished.connect(self.validate_otp)
+        self.username_entry.editingFinished.connect(self.validate_username)
         self.password_1_view.clicked.connect(self.toggle_view_password_1)
         self.password_2_view.clicked.connect(self.toggle_view_password_2)
         self.password_2_entry.textChanged.connect(self.validate_password)
-        self.otp_entry.editingFinished.connect(self.validate_otp)
-        self.username_entry.editingFinished.connect(self.validate_username)
         self.signup_button.clicked.connect(self.handle_update)
         self.cancel_button.clicked.connect(self.handle_cancel)
 
@@ -218,12 +219,6 @@ class ForgotScreen(QMainWindow):
             self.password_2_view.setIcon(QIcon('images/unhide.png'))
 
 
-    # def validate_name(self):
-    #     name = self.name_entry.text()
-    #     if(len(name) > 2):
-    #         self.error_form_label.hide()
-
-
     def validate_otp(self):
         otp_text = self.otp_entry.text()
         if( otp_text.isdigit() ):
@@ -245,7 +240,7 @@ class ForgotScreen(QMainWindow):
     def validate_username(self):
         all_users = get_all_registered_users()
         username = self.username_entry.text()
-        if (username not in all_users):
+        if (username in all_users):
             self.username_validate = True
             self.error_username_label.hide()
         else:
@@ -266,39 +261,17 @@ class ForgotScreen(QMainWindow):
             self.password_validated = False
 
 
-    # def get_gender(self):
-    #     if self.radio_male.isChecked():
-    #         gender = 'Male'
-    #     elif self.radio_female.isChecked():
-    #         gender = 'Female'
-    #     elif self.radio_other.isChecked():
-    #         gender = 'Other'
-    #     else:
-    #         gender = 'Other'
-    #     return gender
-
-
     def handle_update(self):
         if (self.otp_validated and self.password_validated and self.username_validate):
-            name = self.name_entry.text()
-            age = self.otp_entry.text()
-            gender = self.get_gender()
+            otp = self.otp_entry.text()
             username = self.username_entry.text()
             password = self.password_1_entry.text()
-            if( len(name) > 2 ):
+            if( otp == self.created_otp ):
                 self.error_form_label.hide()
-                info_dict = {
-                    "name": name,
-                    "age": age,
-                    "gender": gender,
-                    "username": username,
-                    "password": password
-                }
-                save_credentials_when_signup(info_dict)
+                update_password_for_user(username, password)
                 self.go_to_login_screen(username)
-
             else:
-                self.error_form_label.setText('Complete the form correctly to continue!')
+                self.error_form_label.setText('OTP is incorrect!')
                 self.error_form_label.show()
         else:
             self.error_form_label.setText('Complete the form correctly to continue!')
@@ -324,3 +297,10 @@ class ForgotScreen(QMainWindow):
         self.error_username_label.hide()
         self.error_password_label.hide()
         self.error_form_label.hide()
+        self.otp_validated = False
+        self.password_validated = False
+        self.username_validate = False
+
+
+    def create_and_send_otp(self):
+        self.created_otp = '111111'

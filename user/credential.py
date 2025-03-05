@@ -128,6 +128,13 @@ def get_gender_for_user(username):
     return gender
 
 
+def update_password_for_user(username, password):
+    credentials = load_credentials_file()
+    credentials['credentials'][username]['password'] = password
+    credentials['credentials'][username]['updated'] = str(datetime.datetime.today().date())
+    save_credentials_file(credentials)
+
+
 """ Notes
 1. Remove current user if the last login is more than 3 months
 """
