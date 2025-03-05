@@ -53,14 +53,14 @@ class ForgotScreen(QMainWindow):
         self.resend_otp_button = QPushButton("Resend")
         self.resend_otp_button.setFixedWidth(70)
         self.resend_otp_button.setStyleSheet(resend_otp_button_style)
-        self.resend_timer = QLabel("30 s")
-        self.resend_timer.setFixedSize(30, 40)
-        self.resend_timer.setStyleSheet("font-size: 14px; border: none; margin: 0px; padding: 0px;")
-        self.resend_timer.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        # self.resend_timer.hide()
+        self.resend_timer_label = QLabel("")
+        self.resend_timer_label.setFixedSize(30, 40)
+        self.resend_timer_label.setStyleSheet("font-size: 14px; border: none; margin: 0px; padding: 0px;")
+        self.resend_timer_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.resend_timer_label.hide()
         self.name_layout.addWidget(name_label)
         self.name_layout.addWidget(self.resend_otp_button)
-        self.name_layout.addWidget(self.resend_timer)
+        self.name_layout.addWidget(self.resend_timer_label)
 
         # age field
         self.otp_layout = QHBoxLayout()
@@ -173,6 +173,7 @@ class ForgotScreen(QMainWindow):
         self.password_2_entry.textChanged.connect(self.validate_password)
         self.signup_button.clicked.connect(self.handle_update)
         self.cancel_button.clicked.connect(self.handle_cancel)
+        self.resend_otp_button.clicked.connect(self.handle_resend_otp)
 
         self.lamby_label = QLabel(self.central_widget)
         self.lamby_pixmap = QPixmap('images/lamb/transparent/bolt3.png')
@@ -304,3 +305,24 @@ class ForgotScreen(QMainWindow):
 
     def create_and_send_otp(self):
         self.created_otp = '111111'
+
+
+    def handle_resend_otp(self):
+        self.create_and_send_otp()
+        self.time_left = 10
+        self.timer_function = QTimer(self)
+        self.timer_function.timeout.connect(self.update_resend_countdown)
+        self.timer_function.start(1000)
+        self.resend_otp_button.setEnabled(False)
+        self.resend_timer_label.setText(f'{self.time_left} s')
+        self.resend_timer_label.show()
+
+    def update_resend_countdown(self):
+        if self.time_left > 0:
+            self.time_left -= 1
+            self.resend_timer_label.setText(f'{self.time_left} s')
+        else:
+            self.timer_function.stop()
+            self.resend_timer_label.hide()
+            self.resend_otp_button.setEnabled(True)
+

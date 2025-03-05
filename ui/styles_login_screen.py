@@ -179,4 +179,8 @@ resend_otp_button_style = '''
     QPushButton:pressed {
         background-color: #88C0D0;
     }
+    
+    QPushButton:disabled {
+        background-color: #cacaca;
+    }
 '''
