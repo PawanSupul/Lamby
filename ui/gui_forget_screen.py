@@ -175,7 +175,7 @@ class ForgotScreen(QMainWindow):
         self.cancel_button.clicked.connect(self.handle_cancel)
 
         self.lamby_label = QLabel(self.central_widget)
-        self.lamby_pixmap = QPixmap('images/lamb/transparent/chair.png')
+        self.lamby_pixmap = QPixmap('images/lamb/transparent/bolt3.png')
         self.lamby_label.setPixmap(self.lamby_pixmap)
         self.lamby_label.setScaledContents(True)
         self.lamby_label.setFixedSize(100, 100)
@@ -187,7 +187,7 @@ class ForgotScreen(QMainWindow):
     def update_lamby(self):
         signup_rect = self.forgot_container.geometry()
         self.lamby_label.move(
-            signup_rect.right(),
+            signup_rect.left() - self.lamby_label.width(),
             signup_rect.bottom() - self.lamby_label.height()
         )
 
