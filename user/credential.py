@@ -128,6 +128,12 @@ def get_gender_for_user(username):
     return gender
 
 
+def get_email_for_user(username):
+    credentials = load_credentials_file()
+    email = credentials['credentials'][username]['email']
+    return email
+
+
 def update_password_for_user(username, password):
     credentials = load_credentials_file()
     credentials['credentials'][username]['password'] = password

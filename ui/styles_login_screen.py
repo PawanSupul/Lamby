@@ -21,8 +21,8 @@ input_style = '''
         font-size: 14px;
     }
     
-    QLineEdit: focus {
-        border: 2px solid #81A1C1;
+    QLineEdit:focus {
+        border: 2px solid #393939;
     }
 '''
 
@@ -128,9 +128,15 @@ signup_entry_style = '''
         font-size: 14px;
     }
     
-    QLineEdit: focus {
-        border: 2px solid #81A1C1;
+    QLineEdit:focus {
+        border: 2px solid #393939;
     }
+    
+    QLineEdit:disabled{
+        border: 2px solid #616060;
+        color: #616060;
+    }
+    
 '''
 
 

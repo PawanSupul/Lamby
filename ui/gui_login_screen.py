@@ -199,7 +199,16 @@ class LoginScreen(QMainWindow):
 
 
     def handle_forgot_password(self):
-        self.go_to_named_screen('forgot')
+        self.registered_user_list = get_all_registered_users()
+        self.username = self.username_input.text()
+        if self.username not in self.registered_user_list:
+            self.set_username_error('Username is not registered')
+        else:
+            self.username_input.setText('')
+            self.password_input.setText('')
+            self.username_error_label.hide()
+            self.password_error_label.hide()
+            self.go_to_named_screen('forgot', username=self.username)
 
 
     def handle_sign_up(self):

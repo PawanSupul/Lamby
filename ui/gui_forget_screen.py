@@ -3,8 +3,9 @@ from PyQt6.QtWidgets import (QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QFr
 from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtCore import Qt, QSize, QTimer
 from ui.styles_login_screen import *
-from user.credential import get_all_registered_users, get_current_user, update_password_for_user
-
+from user.credential import get_all_registered_users, get_current_user, update_password_for_user, get_email_for_user
+import secrets
+import sendgrid
 
 class ForgotScreen(QMainWindow):
     def __init__(self, go_to_named_screen):
@@ -79,6 +80,7 @@ class ForgotScreen(QMainWindow):
         username_label.setStyleSheet(signup_label_style)
         self.username_entry = QLineEdit()
         self.username_entry.setStyleSheet(signup_entry_style)
+        self.username_entry.setEnabled(False)
         self.username_layout.addWidget(username_label)
         self.username_layout.addWidget(self.username_entry)
 
@@ -224,7 +226,7 @@ class ForgotScreen(QMainWindow):
         otp_text = self.otp_entry.text()
         if( otp_text.isdigit() ):
             otp = int(otp_text)
-            if( 100000 <= otp <= 999999):
+            if( 0 < otp <= 999999):
                 self.error_otp_label.hide()
                 self.error_form_label.hide()
                 self.otp_validated = True
@@ -303,13 +305,17 @@ class ForgotScreen(QMainWindow):
         self.username_validate = False
 
 
-    def create_and_send_otp(self):
+    def create_and_send_otp(self, username):
+        self.username_entry.setText(f'{username}')
+        email = get_email_for_user(username)
+        self.created_otp = ''.join(str(secrets.randbelow(10)) for _ in range(6))
 
-        self.created_otp = '111111'
+
 
 
     def handle_resend_otp(self):
-        self.create_and_send_otp()
+        username = self.username_entry.text()
+        self.create_and_send_otp(username)
         self.time_left = 10
         self.timer_function = QTimer(self)
         self.timer_function.timeout.connect(self.update_resend_countdown)
@@ -327,3 +333,10 @@ class ForgotScreen(QMainWindow):
             self.resend_timer_label.hide()
             self.resend_otp_button.setEnabled(True)
 
+
+    def send_email_with_otp(self, email, otp):
+        SENDGRID_API_KEY = self.read_sendgrid_api_key()
+
+
+    def read_sendgrid_api_key(self):
+        pass
