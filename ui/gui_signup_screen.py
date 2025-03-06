@@ -17,6 +17,8 @@ class SignUpScreen(QMainWindow):
         self.age_validated = False
         self.password_validated = False
         self.username_validate = False
+        self.email_regex = QRegularExpression(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
+        # self.regex_email_validator = QRegularExpressionValidator(self.email_regex)
         self.make_signup_page()
 
     def make_signup_page(self):
@@ -52,6 +54,7 @@ class SignUpScreen(QMainWindow):
         email_label.setStyleSheet(signup_label_style)
         self.email_entry = QLineEdit()
         self.email_entry.setStyleSheet(signup_entry_style)
+        # self.email_entry.setValidator(self.regex_email_validator)
         self.email_layout.addWidget(email_label)
         self.email_layout.addWidget(self.email_entry)
 
@@ -242,7 +245,7 @@ class SignUpScreen(QMainWindow):
 
     def validate_email(self):
         email = self.email_entry.text()
-        if email == email:
+        if self.email_regex.match(email).hasMatch():
             self.email_validated = True
             self.error_email_label.hide()
         else:
@@ -350,6 +353,7 @@ class SignUpScreen(QMainWindow):
         self.username_entry.setText('')
         self.password_1_entry.setText('')
         self.password_2_entry.setText('')
+        self.error_email_label.hide()
         self.error_age_label.hide()
         self.error_username_label.hide()
         self.error_password_label.hide()
