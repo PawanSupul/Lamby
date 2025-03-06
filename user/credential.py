@@ -19,7 +19,7 @@ def save_credentials_file(json_dict):
 
 
 def save_credentials_when_signup(input_dict):
-    name = input_dict['name']
+    email = input_dict['email']
     age = input_dict['age']
     gender = input_dict['gender']
     username = input_dict['username']
@@ -35,7 +35,7 @@ def save_credentials_when_signup(input_dict):
     if username not in credentials['credentials'].keys():
         credentials['credentials'][username] = {}
 
-    credentials['credentials'][username]['name'] = name
+    credentials['credentials'][username]['email'] = email
     credentials['credentials'][username]['age'] = age
     credentials['credentials'][username]['gender'] = gender
     credentials['credentials'][username]['last-login'] = today_date

@@ -304,6 +304,7 @@ class ForgotScreen(QMainWindow):
 
 
     def create_and_send_otp(self):
+
         self.created_otp = '111111'
 
 

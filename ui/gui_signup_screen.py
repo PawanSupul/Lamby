@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import (QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QFrame, QLabel, QLineEdit,
                              QPushButton, QRadioButton, QButtonGroup, QSizePolicy)
-from PyQt6.QtGui import QIcon, QPixmap
-from PyQt6.QtCore import Qt, QSize, QTimer
+from PyQt6.QtGui import QIcon, QPixmap, QRegularExpressionValidator
+from PyQt6.QtCore import Qt, QSize, QTimer, QRegularExpression
 from ui.styles_login_screen import *
 from user.credential import save_credentials_when_signup, get_all_registered_users, get_current_user
 
@@ -13,6 +13,7 @@ class SignUpScreen(QMainWindow):
         self.label_width = 130
         self.pw_1_show = False
         self.pw_2_show = False
+        self.email_validated = False
         self.age_validated = False
         self.password_validated = False
         self.username_validate = False
@@ -45,14 +46,14 @@ class SignUpScreen(QMainWindow):
         self.details_frame.setStyleSheet(signup_details_frame_style)
 
         # name field
-        self.name_layout = QHBoxLayout()
-        name_label = QLabel("Your Name: ")
-        name_label.setFixedWidth(self.label_width)
-        name_label.setStyleSheet(signup_label_style)
-        self.name_entry = QLineEdit()
-        self.name_entry.setStyleSheet(signup_entry_style)
-        self.name_layout.addWidget(name_label)
-        self.name_layout.addWidget(self.name_entry)
+        self.email_layout = QHBoxLayout()
+        email_label = QLabel("Your Email: ")
+        email_label.setFixedWidth(self.label_width)
+        email_label.setStyleSheet(signup_label_style)
+        self.email_entry = QLineEdit()
+        self.email_entry.setStyleSheet(signup_entry_style)
+        self.email_layout.addWidget(email_label)
+        self.email_layout.addWidget(self.email_entry)
 
         # age field
         self.age_layout = QHBoxLayout()
@@ -139,6 +140,11 @@ class SignUpScreen(QMainWindow):
         self.button_layout.addWidget(self.cancel_button)
 
         # Error messages
+        self.error_email_label = QLabel("Please enter a valid email address")
+        self.error_email_label.setStyleSheet(error_label_style)
+        self.error_email_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.error_email_label.setFixedHeight(40)
+        self.error_email_label.hide()
         self.error_age_label = QLabel('You must be 18 years or older to sign up!')
         self.error_age_label.setStyleSheet(error_label_style)
         self.error_age_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -161,7 +167,8 @@ class SignUpScreen(QMainWindow):
         self.error_form_label.hide()
 
         self.username_password_layout = QVBoxLayout()
-        self.username_password_layout.addLayout(self.name_layout)
+        self.username_password_layout.addLayout(self.email_layout)
+        self.username_password_layout.addWidget(self.error_email_label)
         self.username_password_layout.addLayout(self.age_layout)
         self.username_password_layout.addWidget(self.error_age_label)
         self.username_password_layout.addLayout(self.gender_layout)
@@ -180,11 +187,12 @@ class SignUpScreen(QMainWindow):
         self.signup_layout.addWidget(self.error_form_label)
         self.signup_layout.setSpacing(20)
 
+        self.email_entry.editingFinished.connect(self.validate_email)
+        self.age_entry.editingFinished.connect(self.validate_age)
+        self.username_entry.editingFinished.connect(self.validate_username)
         self.password_1_view.clicked.connect(self.toggle_view_password_1)
         self.password_2_view.clicked.connect(self.toggle_view_password_2)
         self.password_2_entry.textChanged.connect(self.validate_password)
-        self.age_entry.editingFinished.connect(self.validate_age)
-        self.username_entry.editingFinished.connect(self.validate_username)
         self.signup_button.clicked.connect(self.handle_signup)
         self.cancel_button.clicked.connect(self.handle_cancel)
 
@@ -232,10 +240,14 @@ class SignUpScreen(QMainWindow):
             self.password_2_view.setIcon(QIcon('images/unhide.png'))
 
 
-    def validate_name(self):
-        name = self.name_entry.text()
-        if(len(name) > 2):
-            self.error_form_label.hide()
+    def validate_email(self):
+        email = self.email_entry.text()
+        if email == email:
+            self.email_validated = True
+            self.error_email_label.hide()
+        else:
+            self.email_validated = False
+            self.error_email_label.show()
 
 
     def validate_age(self):
@@ -297,27 +309,23 @@ class SignUpScreen(QMainWindow):
 
 
     def handle_signup(self):
-        if (self.age_validated and self.password_validated and self.username_validate):
-            name = self.name_entry.text()
+        if (self.email_validated and self.age_validated and self.password_validated and self.username_validate):
+            self.error_form_label.hide()
+
+            email = self.email_entry.text()
             age = self.age_entry.text()
             gender = self.get_gender()
             username = self.username_entry.text()
             password = self.password_1_entry.text()
-            if( len(name) > 2 ):
-                self.error_form_label.hide()
-                info_dict = {
-                    "name": name,
-                    "age": age,
-                    "gender": gender,
-                    "username": username,
-                    "password": password
-                }
-                save_credentials_when_signup(info_dict)
-                self.go_to_login_screen(username)
-
-            else:
-                self.error_form_label.setText('Complete the form correctly to continue!')
-                self.error_form_label.show()
+            info_dict = {
+                "email": email,
+                "age": age,
+                "gender": gender,
+                "username": username,
+                "password": password
+            }
+            save_credentials_when_signup(info_dict)
+            self.go_to_login_screen(username)
         else:
             self.error_form_label.setText('Complete the form correctly to continue!')
             self.error_form_label.show()
@@ -334,7 +342,7 @@ class SignUpScreen(QMainWindow):
 
 
     def clear_form(self):
-        self.name_entry.setText('')
+        self.email_entry.setText('')
         self.age_entry.setText('')
         for gb in self.gender_button_group.buttons():
             if gb.isChecked():
