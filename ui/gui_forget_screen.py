@@ -5,7 +5,11 @@ from PyQt6.QtCore import Qt, QSize, QTimer
 from ui.styles_login_screen import *
 from user.credential import get_all_registered_users, get_current_user, update_password_for_user, get_email_for_user
 import secrets
-import sendgrid
+import json
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
 
 class ForgotScreen(QMainWindow):
     def __init__(self, go_to_named_screen):
@@ -17,6 +21,7 @@ class ForgotScreen(QMainWindow):
         self.otp_validated = False
         self.password_validated = False
         self.username_validate = False
+        self.username = None
         self.make_forgot_page()
 
 
@@ -47,10 +52,10 @@ class ForgotScreen(QMainWindow):
 
         # OTP field
         self.name_layout = QHBoxLayout()
-        name_label = QLabel("We have sent an OTP to your registered email address. Please enter the OTP to continue.")
-        name_label.setWordWrap(True)
-        name_label.setStyleSheet("border: none; padding: 0px; color: navy; font-size: 14px;")
-        name_label.setFixedHeight(40)
+        self.name_label = QLabel("We have sent an OTP to your registered email address. Please enter the OTP to continue.")
+        self.name_label.setWordWrap(True)
+        self.name_label.setStyleSheet("border: none; padding: 0px; color: navy; font-size: 14px;")
+        self.name_label.setFixedHeight(40)
         self.resend_otp_button = QPushButton("Resend")
         self.resend_otp_button.setFixedWidth(70)
         self.resend_otp_button.setStyleSheet(resend_otp_button_style)
@@ -59,7 +64,7 @@ class ForgotScreen(QMainWindow):
         self.resend_timer_label.setStyleSheet("font-size: 14px; border: none; margin: 0px; padding: 0px;")
         self.resend_timer_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.resend_timer_label.hide()
-        self.name_layout.addWidget(name_label)
+        self.name_layout.addWidget(self.name_label)
         self.name_layout.addWidget(self.resend_otp_button)
         self.name_layout.addWidget(self.resend_timer_label)
 
@@ -305,17 +310,8 @@ class ForgotScreen(QMainWindow):
         self.username_validate = False
 
 
-    def create_and_send_otp(self, username):
-        self.username_entry.setText(f'{username}')
-        email = get_email_for_user(username)
-        self.created_otp = ''.join(str(secrets.randbelow(10)) for _ in range(6))
-
-
-
-
     def handle_resend_otp(self):
-        username = self.username_entry.text()
-        self.create_and_send_otp(username)
+        self.create_and_send_otp()
         self.time_left = 10
         self.timer_function = QTimer(self)
         self.timer_function.timeout.connect(self.update_resend_countdown)
@@ -323,6 +319,7 @@ class ForgotScreen(QMainWindow):
         self.resend_otp_button.setEnabled(False)
         self.resend_timer_label.setText(f'{self.time_left} s')
         self.resend_timer_label.show()
+
 
     def update_resend_countdown(self):
         if self.time_left > 0:
@@ -334,9 +331,52 @@ class ForgotScreen(QMainWindow):
             self.resend_otp_button.setEnabled(True)
 
 
-    def send_email_with_otp(self, email, otp):
-        SENDGRID_API_KEY = self.read_sendgrid_api_key()
+    def create_and_send_otp(self):
+        self.created_otp = ''.join(str(secrets.randbelow(10)) for _ in range(6))
+        self.username_entry.setText(f'{self.username}')
+        email = get_email_for_user(self.username)
+        hidden_email_part_list = email.split('@')
+        if len(hidden_email_part_list[0]) > 4:
+            hidden_email_part_list[0] = hidden_email_part_list[0][:2] + '*' * len(hidden_email_part_list[0][2:-2]) + hidden_email_part_list[0][-2:]
+        else:
+            hidden_email_part_list[0] = hidden_email_part_list[0][:2] + '*' * len(hidden_email_part_list[0][2:])
+        hidden_email = '@'.join(hidden_email_part_list)
+        self.name_label.setText(f"We have sent an OTP to your registered email {hidden_email}.")
+        self.send_email_with_otp(email, self.username, self.created_otp)
 
 
-    def read_sendgrid_api_key(self):
-        pass
+    def send_email_with_otp(self, email, username, otp):
+        EMAIL, APP_PW = self.read_email_credentials()
+        with open('data/email_templates/password_reset_otp.html', 'r', encoding='utf-8') as fid:
+            html_content = fid.read()
+        html_content = html_content.replace("{{USERNAME}}", username)
+        html_content = html_content.replace("{{OTP_CODE}}", otp)
+
+        msg = MIMEMultipart()
+        msg["From"] = EMAIL
+        msg["To"] = email
+        msg["Subject"] = "OTP to reset Lamby app password"
+        msg.attach(MIMEText(html_content, "html"))
+
+        try:
+            server = smtplib.SMTP("smtp.gmail.com", 587)
+            server.starttls()
+            server.login(EMAIL, APP_PW)
+            server.sendmail(EMAIL, email, msg.as_string())
+            server.quit()
+        except Exception as e:
+            print(f'Exception when sending password reset OTP email: {e}')
+
+
+    def read_email_credentials(self):
+        with open('secrets/email_provider.json', 'r') as fid:
+            email_broker_data = json.load(fid)
+        email = email_broker_data['email']
+        api_key = email_broker_data['app-pw']
+        return email, api_key
+
+
+    def set_username(self, username):
+        self.username = username
+
+
