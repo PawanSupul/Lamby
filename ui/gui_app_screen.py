@@ -11,6 +11,7 @@ from user.progress import add_completed_lesson_to_user
 from user.credential import get_gender_for_user
 from converter.speech_to_text import SpeachToText
 from converter.text_to_speech import TextToSpeech_Microsoft
+from langdetect import detect
 
 
 class AppScreen(QMainWindow):
@@ -282,6 +283,12 @@ class AppScreen(QMainWindow):
         self.add_message(reply_text, "system")
         if(self.mode == 'story' and self.conversation_engine.num_dialogs > self.dialog_threshold_for_lesson_complete):
             add_completed_lesson_to_user(self.username, self.lesson_num)
+        self.output_as_speech(reply_text)
+
+    def output_as_speech(self, text):
+        language = detect(text)
+        speaker = 1
+        self.text_to_speech.text_to_speech(text, language, speaker)
 
 
     def add_message(self, text, sender):
