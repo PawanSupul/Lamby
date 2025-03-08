@@ -1,5 +1,10 @@
 {
     "test": {
         "completed-lessons": []
+    },
+    "male": {
+        "completed-lessons": [
+            1
+        ]
     }
 }

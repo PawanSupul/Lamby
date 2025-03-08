@@ -221,9 +221,12 @@ class LoadScreen(QMainWindow):
 
     def handle_random_chat(self):
         completed_lessons = get_completed_lessons(self.username)
-        random_lesson = random.choice(completed_lessons)
-        lesson_description = self.story_df.loc[self.story_df.loc[:, 'lesson'] == random_lesson, 'description'].values[0]
-        self.go_to_named_screen('app', username=self.username, lesson=lesson_description, lesson_num=None, mode='random')
+        if(len(completed_lessons) != 0):
+            random_lesson = random.choice(completed_lessons)
+            lesson_description = self.story_df.loc[self.story_df.loc[:, 'lesson'] == random_lesson, 'description'].values[0]
+            self.go_to_named_screen('app', username=self.username, lesson=lesson_description, lesson_num=None, mode='random')
+        else:
+            self.handle_simple_chat()
 
 
     def handle_section_buttons(self, section_num):
