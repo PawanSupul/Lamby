@@ -140,7 +140,6 @@ class LoginScreen(QMainWindow):
         self.registered_user_list = get_all_registered_users()
         self.username = self.username_input.text()
         self.password = self.password_input.text()
-        print(f'{self.username} - {self.password}')
         if(self.username == ''):
             self.set_username_error('Username empty!')
         elif(self.password == ''):

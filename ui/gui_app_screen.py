@@ -354,28 +354,23 @@ class AppScreen(QMainWindow):
 
     def animate_button(self, clicked_button):
         if self.clicked_button_id == clicked_button:
-            print('same clicked')
             self.clicked_button_id = None
         else:
             self.clicked_button_id = clicked_button
             if clicked_button == self.send_button_es:
-                print('pressed button is ES')
                 self.speech_to_text.set_model("es")
                 speech = self.speech_to_text.speech_to_text_dynamic()
                 self.input_field.setText(speech)
             else:
-                print('pressed button is EN')
                 self.speech_to_text.set_model("en")
                 speech = self.speech_to_text.speech_to_text_dynamic()
                 self.input_field.setText(speech)
             self.send_message()
-            print('different unclick')
         clicked_button.setChecked(False)
         self.clicked_button_id = None
 
 
     def handle_clear(self):
-        print('clear button pressed')
         self.translated_result.hide()
         for i in range(self.scroll_layout.count()):
             widget = self.scroll_layout.itemAt(i).widget()
@@ -383,9 +378,8 @@ class AppScreen(QMainWindow):
 
 
     def handle_reset(self):
-        print('reset button pressed')
         self.handle_clear()
-        print("""clear chatgpt memory and start anew""")
+        print("""clear chatgpt memory and reset""")
         self.reset_chat_signal.emit()
 
 
@@ -407,13 +401,11 @@ class AppScreen(QMainWindow):
 
 
     def handle_go_back(self):
-        print('Go back')
         self.handle_reset()
         self.go_to_named_screen('load', username=self.username)
 
 
     def handle_logout(self):
-        print('log out')
         self.handle_reset()
         self.go_to_named_screen('login', username=self.username)
 

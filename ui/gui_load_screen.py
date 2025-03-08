@@ -22,7 +22,6 @@ class LoadScreen(QMainWindow):
         self.story_df = pd.read_excel('data/story_data/story.xlsx')
         self.num_lesson_columns = 3
         self.make_loading_screen()
-        print('made load screen')
 
 
     def set_username(self, username):
@@ -230,8 +229,6 @@ class LoadScreen(QMainWindow):
 
 
     def handle_section_buttons(self, section_num):
-        print(f'handle section {section_num}')
-
         list_sections = self.story_df.loc[:, 'section'].unique().tolist()
         hide_sections = [x for x in list_sections if x != section_num]
         for section in hide_sections:
@@ -318,8 +315,5 @@ class LoadScreen(QMainWindow):
             self.select_user.setIcon(QIcon('images/user_other.png'))
         (self.completed_sections, self.ongoing_sections, self.incomplete_sections,
          self.completed_lessons, self.incomplete_lessons) = self.get_complete_and_incomplete_sections(self.username)
-        print(self.completed_lessons)
-        print(self.completed_sections)
-        print(self.incomplete_sections)
         self.update_story_line_progress()
 

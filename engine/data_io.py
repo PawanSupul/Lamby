@@ -76,4 +76,3 @@ if __name__ == '__main__':
     vocabulary_json_directory = r'tests/'
     jio = Json_IO(vocabulary_json_directory)
     unique_words = jio.get_vocabulary_upto_unit(2, 'all')
-    print(set(unique_words))

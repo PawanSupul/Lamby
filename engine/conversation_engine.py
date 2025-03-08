@@ -27,7 +27,6 @@ class ConversationEngine(QObject):
             output = {'status': 0, 'text': '¡Adiós! ¡Que tengas un buen día!'}
         else:
             self.conversation_history.append({"role": "user", "content": user_text})
-            # print(f'topic: {self.lesson}')
             system_instruction = (
                 "Teach Spanish to beginners through simple conversation. "
                 "Speak in Spanish, use simple words, correct mistakes in English, and reply in English only when necessary."

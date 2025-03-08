@@ -54,7 +54,7 @@ class SpeachToText():
 
                 if full_phrase:
                     result = json.loads(rec.Result())["text"]
-                    print(f"You said EN: {result}")
+                    print(f"You said: {result}")
                     return result
 
 

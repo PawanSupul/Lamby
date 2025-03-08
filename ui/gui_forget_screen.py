@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import (QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QFr
 from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtCore import Qt, QSize, QTimer, QThread
 from ui.styles_login_screen import *
-from user.credential import get_all_registered_users, get_current_user, update_password_for_user, get_email_for_user
+from user.credential import get_current_user, update_password_for_user, get_email_for_user
 import secrets
 import json
 import smtplib
