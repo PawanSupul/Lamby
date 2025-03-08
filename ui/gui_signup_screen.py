@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QFrame, QLabel, QLineEdit,
                              QPushButton, QRadioButton, QButtonGroup, QSizePolicy)
-from PyQt6.QtGui import QIcon, QPixmap, QRegularExpressionValidator
+from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtCore import Qt, QSize, QTimer, QRegularExpression
 from ui.styles_login_screen import *
 from user.credential import save_credentials_when_signup, get_all_registered_users, get_current_user
@@ -20,6 +20,7 @@ class SignUpScreen(QMainWindow):
         self.email_regex = QRegularExpression(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
         # self.regex_email_validator = QRegularExpressionValidator(self.email_regex)
         self.make_signup_page()
+
 
     def make_signup_page(self):
         self.central_widget = QWidget(self)
@@ -208,6 +209,7 @@ class SignUpScreen(QMainWindow):
 
         QTimer.singleShot(0, self.update_lamby)
 
+
     def update_lamby(self):
         signup_rect = self.signup_container.geometry()
         self.lamby_label.move(
@@ -215,10 +217,10 @@ class SignUpScreen(QMainWindow):
             signup_rect.bottom() - self.lamby_label.height()
         )
 
+
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self.update_lamby()
-
 
 
     def toggle_view_password_1(self):
@@ -358,3 +360,4 @@ class SignUpScreen(QMainWindow):
         self.error_username_label.hide()
         self.error_password_label.hide()
         self.error_form_label.hide()
+

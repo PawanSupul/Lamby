@@ -1,6 +1,5 @@
 from PyQt6.QtWidgets import QStackedWidget
 from PyQt6.QtGui import QPixmap
-
 from ui.gui_login_screen import LoginScreen
 from ui.gui_signup_screen import SignUpScreen
 from ui.gui_forget_screen import ForgotScreen
@@ -57,7 +56,4 @@ class MainWindow(QStackedWidget):
             self.setCurrentWidget(self.app_screen)
         else:
             self.setCurrentWidget(self.login_screen)
-
-
-
 

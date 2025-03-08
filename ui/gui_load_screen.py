@@ -129,12 +129,14 @@ class LoadScreen(QMainWindow):
 
         QTimer.singleShot(0, self.update_lamby)
 
+
     def update_lamby(self):
         signup_rect = self.storyline_container.geometry()
         self.lamby_label.move(
             signup_rect.left() + int(self.lamby_label.width() * 1.5) ,
             signup_rect.top() - self.lamby_label.height() + 27
         )
+
 
     def resizeEvent(self, event):
         super().resizeEvent(event)

@@ -160,6 +160,7 @@ password_view_button_style = '''
     }
 '''
 
+
 signup_details_frame_style = """
     QFrame { 
         border: 1px solid #5E81AC; 
@@ -167,6 +168,7 @@ signup_details_frame_style = """
         margin: 0px;
     }
 """
+
 
 resend_otp_button_style = '''
     QPushButton {

@@ -1,5 +1,3 @@
-import time
-
 from PyQt6.QtWidgets import (QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QFrame, QLabel, QLineEdit,
                              QPushButton, QSizePolicy)
 from PyQt6.QtGui import QIcon, QPixmap
@@ -23,7 +21,6 @@ class ForgotScreen(QMainWindow):
         self.pw_2_show = False
         self.otp_validated = False
         self.password_validated = False
-        self.username_validate = False
         self.username = None
         self.make_forgot_page()
 
@@ -177,7 +174,6 @@ class ForgotScreen(QMainWindow):
         self.forgot_layout.setSpacing(20)
 
         self.otp_entry.editingFinished.connect(self.validate_otp)
-        self.username_entry.editingFinished.connect(self.validate_username)
         self.password_1_view.clicked.connect(self.toggle_view_password_1)
         self.password_2_view.clicked.connect(self.toggle_view_password_2)
         self.password_2_entry.textChanged.connect(self.validate_password)
@@ -248,17 +244,6 @@ class ForgotScreen(QMainWindow):
             self.otp_validated = False
 
 
-    def validate_username(self):
-        all_users = get_all_registered_users()
-        username = self.username_entry.text()
-        if (username in all_users):
-            self.username_validate = True
-            self.error_username_label.hide()
-        else:
-            self.username_validate = False
-            self.error_username_label.show()
-
-
     def validate_password(self):
         password_1 = self.password_1_entry.text()
         password_2 = self.password_2_entry.text()
@@ -273,7 +258,7 @@ class ForgotScreen(QMainWindow):
 
 
     def handle_update(self):
-        if (self.otp_validated and self.password_validated and self.username_validate):
+        if (self.otp_validated and self.password_validated):
             otp = self.otp_entry.text()
             username = self.username_entry.text()
             password = self.password_1_entry.text()
@@ -310,7 +295,6 @@ class ForgotScreen(QMainWindow):
         self.error_form_label.hide()
         self.otp_validated = False
         self.password_validated = False
-        self.username_validate = False
 
 
     def handle_resend_otp(self):

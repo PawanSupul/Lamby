@@ -130,10 +130,10 @@ class LoginScreen(QMainWindow):
             login_rect.top() - self.lamby_label.height() + 12
         )
 
+
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self.update_lamby()
-
 
 
     def handle_login(self):

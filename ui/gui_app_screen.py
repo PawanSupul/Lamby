@@ -119,7 +119,6 @@ class AppScreen(QMainWindow):
         self.select_user.setStyleSheet(select_user_style)
         self.user_menu = QMenu()
         self.user_menu.addAction('Logout', self.handle_logout)
-        # self.select_user.setMenu(self.user_menu)
 
         self.menu_layout.addWidget(self.reset_button)
         self.menu_layout.addWidget(self.clear_button)
