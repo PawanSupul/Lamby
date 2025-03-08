@@ -376,6 +376,7 @@ class AppScreen(QMainWindow):
 
     def handle_clear(self):
         print('clear button pressed')
+        self.translated_result.hide()
         for i in range(self.scroll_layout.count()):
             widget = self.scroll_layout.itemAt(i).widget()
             widget.deleteLater()
