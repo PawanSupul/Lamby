@@ -1,12 +1,15 @@
+import time
+
 from PyQt6.QtWidgets import (QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QFrame, QLabel, QLineEdit,
                              QPushButton, QSizePolicy)
 from PyQt6.QtGui import QIcon, QPixmap
-from PyQt6.QtCore import Qt, QSize, QTimer
+from PyQt6.QtCore import Qt, QSize, QTimer, QThread
 from ui.styles_login_screen import *
 from user.credential import get_all_registered_users, get_current_user, update_password_for_user, get_email_for_user
 import secrets
 import json
 import smtplib
+import asyncio
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -342,7 +345,11 @@ class ForgotScreen(QMainWindow):
             hidden_email_part_list[0] = hidden_email_part_list[0][:2] + '*' * len(hidden_email_part_list[0][2:])
         hidden_email = '@'.join(hidden_email_part_list)
         self.name_label.setText(f"We have sent an OTP to your registered email {hidden_email}.")
-        self.send_email_with_otp(email, self.username, self.created_otp)
+        # asynchronous email sending
+        self.thread = QThread(self)
+        self.thread.run = lambda: self.send_email_with_otp(email, self.username, self.created_otp)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.thread.start()
 
 
     def send_email_with_otp(self, email, username, otp):
@@ -351,28 +358,33 @@ class ForgotScreen(QMainWindow):
             html_content = fid.read()
         html_content = html_content.replace("{{USERNAME}}", username)
         html_content = html_content.replace("{{OTP_CODE}}", otp)
-
         msg = MIMEMultipart()
         msg["From"] = EMAIL
         msg["To"] = email
         msg["Subject"] = "OTP to reset Lamby app password"
         msg.attach(MIMEText(html_content, "html"))
-
         try:
-            server = smtplib.SMTP("smtp.gmail.com", 587)
-            server.starttls()
-            server.login(EMAIL, APP_PW)
-            server.sendmail(EMAIL, email, msg.as_string())
-            server.quit()
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            loop.run_until_complete(self.send_email(EMAIL, APP_PW, email, msg))
+            self.thread.quit()
         except Exception as e:
             print(f'Exception when sending password reset OTP email: {e}')
 
 
+    async def send_email(self, from_email, from_email_app_pw, to_email, msg):
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
+        server.login(from_email, from_email_app_pw)
+        server.sendmail(from_email, to_email, msg.as_string())
+        server.quit()
+
+
     def read_email_credentials(self):
         with open('secrets/email_provider.json', 'r') as fid:
-            email_broker_data = json.load(fid)
-        email = email_broker_data['email']
-        api_key = email_broker_data['app-pw']
+            email_provider_data = json.load(fid)
+        email = email_provider_data['email']
+        api_key = email_provider_data['app-pw']
         return email, api_key
 
 
