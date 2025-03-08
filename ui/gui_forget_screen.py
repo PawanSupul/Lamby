@@ -315,7 +315,7 @@ class ForgotScreen(QMainWindow):
 
     def handle_resend_otp(self):
         self.create_and_send_otp()
-        self.time_left = 10
+        self.time_left = 45
         self.timer_function = QTimer(self)
         self.timer_function.timeout.connect(self.update_resend_countdown)
         self.timer_function.start(1000)

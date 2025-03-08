@@ -58,7 +58,7 @@ borderless_button_style = '''
     }
     
     QPushButton:hover {
-        color: blue;
+        color: #0000CD;
     }
 
     QPushButton:pressed {
