@@ -7,3 +7,5 @@ PyQt6_sip==13.9.1
 pyttsx3==2.98
 sounddevice==0.5.1
 vosk==0.3.45
+openpyxl
+langdetect

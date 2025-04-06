@@ -25,6 +25,7 @@ share/python-wheels/
 MANIFEST
 secrets/
 images/wallpapers/*.psd
+user/credential.json
 
 # Unit test / coverage reports
 htmlcov/
